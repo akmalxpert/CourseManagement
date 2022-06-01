@@ -1,4 +1,4 @@
-package uz.exadel.coursemanagement.entity;
+package uz.exadel.entity;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -15,7 +15,6 @@ public class Course {
     @Id
     @GeneratedValue()
     private UUID id;
-
 
     private String name;
 
