@@ -14,17 +14,6 @@ import static org.springframework.http.HttpStatus.NOT_FOUND;
 @RestControllerAdvice
 @RequiredArgsConstructor
 public class GlobalExceptionHandler {
-    @ExceptionHandler(GlobalException.class)
-    public ResponseEntity<Object> handleGlobalException(GlobalException ex) {
-        return ResponseEntity
-                .status(ex.getCode())
-                .body(new ExceptionResponse(
-                                ex.getCode(),
-                                ex.getStatus(),
-                                ex.getMessage()
-                        )
-                );
-    }
 
     @ExceptionHandler(value = {MissingMandatoryFieldException.class})
     @ResponseStatus(BAD_REQUEST)
