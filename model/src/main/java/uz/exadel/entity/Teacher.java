@@ -5,8 +5,8 @@ import org.hibernate.annotations.GenericGenerator;
 import uz.exadel.enums.TeacherPositionEnum;
 
 import javax.persistence.*;
-import java.util.EnumSet;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 @Entity
@@ -20,7 +20,7 @@ public class Teacher {
     private String fullName;
 
     @ElementCollection(targetClass = TeacherPositionEnum.class)
-    private EnumSet<TeacherPositionEnum> positions;
+    private Set<TeacherPositionEnum> positions;
 
     private String email;
 

@@ -9,6 +9,7 @@ import java.util.UUID;
 
 @Entity
 @Data
+@Table(name = "groups")
 public class Group {
     @Id
     @GeneratedValue(generator = "uuid2")
