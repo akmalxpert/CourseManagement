@@ -1,6 +1,6 @@
 package uz.exadel.controller;
 
-import lombok.RequiredArgsConstructor;
+import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import uz.exadel.dtos.SchoolDTO;
@@ -8,7 +8,7 @@ import uz.exadel.service.SchoolService;
 
 @RestController
 @RequestMapping("/api/school")
-@RequiredArgsConstructor
+@AllArgsConstructor
 @CrossOrigin
 public class SchoolController {
     private SchoolService schoolService;
