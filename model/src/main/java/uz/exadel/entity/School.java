@@ -23,10 +23,13 @@ public class School {
 
     private String phoneNumber;
 
+    private String postalCode;
+
     public School fromDTO(SchoolDTO schoolDTO) {
         this.setAddress(schoolDTO.getAddress());
         this.setName(schoolDTO.getName());
         this.setPhoneNumber(schoolDTO.getPhoneNumber());
+        this.setPostalCode(schoolDTO.getPostalCode());
         return this;
     }
 }

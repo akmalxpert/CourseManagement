@@ -1,10 +1,12 @@
 package uz.exadel.service.impl;
 
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 import uz.exadel.dtos.SchoolDTO;
 import uz.exadel.entity.School;
-import uz.exadel.exception.BadRequestException;
+import uz.exadel.exception.MissingMandatoryFieldException;
+import uz.exadel.exception.SchoolNotFoundException;
 import uz.exadel.repository.SchoolRepository;
 import uz.exadel.service.SchoolService;
 
@@ -14,9 +16,9 @@ import java.util.UUID;
 
 @Service
 @Transactional
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class SchoolServiceImpl implements SchoolService {
-    private SchoolRepository schoolRepository;
+    private final SchoolRepository schoolRepository;
 
     @Override
     public String add(SchoolDTO schoolDTO) {
@@ -29,13 +31,13 @@ public class SchoolServiceImpl implements SchoolService {
 
     @Override
     public School get(String id) {
-        if (id == null || id.isEmpty()) {
-            throw new BadRequestException("Id should not be empty");
+        if (StringUtils.hasText(id)) {
+            throw new MissingMandatoryFieldException("Id should not be empty");
         }
 
         School school = schoolRepository.findById(UUID.fromString(id)).orElse(null);
         if (school == null) {
-            throw new BadRequestException("School not found");
+            throw new SchoolNotFoundException();
         }
 
         return school;
@@ -43,13 +45,13 @@ public class SchoolServiceImpl implements SchoolService {
 
     @Override
     public String delete(String id) {
-        if (id == null || id.isEmpty()) {
-            throw new BadRequestException("Id should not be empty");
+        if (StringUtils.hasText(id)) {
+            throw new MissingMandatoryFieldException("Id should not be empty");
         }
         UUID uuid = UUID.fromString(id);
         School school = schoolRepository.findById(uuid).orElse(null);
         if (school == null) {
-            throw new BadRequestException("School not found");
+            throw new SchoolNotFoundException();
         }
 
         schoolRepository.deleteById(uuid);
@@ -58,13 +60,13 @@ public class SchoolServiceImpl implements SchoolService {
 
     @Override
     public String update(SchoolDTO schoolDTO, String id) {
-        if (id == null || id.isEmpty()) {
-            throw new BadRequestException("Id should not be empty");
+        if (StringUtils.hasText(id)) {
+            throw new MissingMandatoryFieldException("Id should not be empty");
         }
 
         School school = schoolRepository.findById(UUID.fromString(id)).orElse(null);
         if (school == null) {
-            throw new BadRequestException("School not found");
+            throw new SchoolNotFoundException();
         }
 
         School updatedSchool = school.fromDTO(schoolDTO);

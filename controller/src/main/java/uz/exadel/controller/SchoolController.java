@@ -1,20 +1,26 @@
 package uz.exadel.controller;
 
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import uz.exadel.dtos.SchoolDTO;
 import uz.exadel.service.SchoolService;
+import uz.exadel.validations.SchoolValidationService;
 
 @RestController
 @RequestMapping("/api/school")
-@AllArgsConstructor
+@RequiredArgsConstructor
 @CrossOrigin
 public class SchoolController {
-    private SchoolService schoolService;
+    private final SchoolService schoolService;
+
+    private final SchoolValidationService schoolValidationService;
 
     @PostMapping
     public ResponseEntity<?> addSchool(@RequestBody SchoolDTO schoolDTO) {
+        //some validation
+        schoolValidationService.validateCreateSchool(schoolDTO);
+        //do something after validation
         return ResponseEntity.ok(schoolService.add(schoolDTO));
     }
 
@@ -34,7 +40,8 @@ public class SchoolController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> updateSchool(@RequestBody SchoolDTO schoolDTO, @PathVariable String id) {
+    public ResponseEntity<?> updateSchool(@PathVariable String id, @RequestBody SchoolDTO schoolDTO) {
+        schoolValidationService.validateUpdateSchool(schoolDTO);
         return ResponseEntity.ok(schoolService.update(schoolDTO, id));
     }
 }
