@@ -2,6 +2,7 @@ package uz.exadel.entity;
 
 import lombok.Data;
 import org.hibernate.annotations.GenericGenerator;
+import uz.exadel.dtos.SchoolDTO;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -21,4 +22,11 @@ public class School {
     private String address;
 
     private String phoneNumber;
+
+    public School fromDTO(SchoolDTO schoolDTO) {
+        this.setAddress(schoolDTO.getAddress());
+        this.setName(schoolDTO.getName());
+        this.setPhoneNumber(schoolDTO.getPhoneNumber());
+        return this;
+    }
 }
