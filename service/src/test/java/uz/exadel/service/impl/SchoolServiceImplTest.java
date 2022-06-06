@@ -104,7 +104,9 @@ class SchoolServiceImplTest {
 
         School actualSchool = schoolService.get(TEST_SCHOOL_ID);
 
+        inOrder.verify(schoolRepository, times(1)).findById(TEST_SCHOOL_UUID);
         assertEquals(school, actualSchool);
+        inOrder.verifyNoMoreInteractions();
     }
 
     @Test
@@ -121,7 +123,11 @@ class SchoolServiceImplTest {
         when(schoolRepository.findById(TEST_SCHOOL_UUID)).thenReturn(Optional.of(school));
 
         String result = schoolService.delete(TEST_SCHOOL_ID);
+
+        inOrder.verify(schoolRepository, times(1)).findById(TEST_SCHOOL_UUID);
         assertEquals("Delete success", result);
+        inOrder.verify(schoolRepository).deleteById(TEST_SCHOOL_UUID);
+        inOrder.verifyNoMoreInteractions();
     }
 
     @Test
@@ -139,7 +145,11 @@ class SchoolServiceImplTest {
         when(schoolRepository.findById(TEST_SCHOOL_UUID)).thenReturn(Optional.of(school));
 
         String actualResult = schoolService.update(schoolDTO, TEST_SCHOOL_ID);
+
+        inOrder.verify(schoolRepository, times(1)).findById(TEST_SCHOOL_UUID);
+        inOrder.verify(schoolRepository, times(1)).save(school);
         assertEquals("Update success", actualResult);
+        inOrder.verifyNoMoreInteractions();
     }
 
     @Test

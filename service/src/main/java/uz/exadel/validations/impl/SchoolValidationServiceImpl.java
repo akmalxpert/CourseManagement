@@ -41,7 +41,10 @@ public class SchoolValidationServiceImpl implements SchoolValidationService {
 
     private void additionalValidation(SchoolDTO schoolDTO) {
         ValidatorUtils.checkMaxLength(schoolDTO.getName(), 25, "name");
-        ValidatorUtils.checkMaxLength(schoolDTO.getPhoneNumber(), 12, "phone number");
+        ValidatorUtils.checkMaxLength(schoolDTO.getPhoneNumber(), 13, "phone number");
+        if (StringUtils.hasText(schoolDTO.getPostalCode())) {
+            ValidatorUtils.checkMaxLength(schoolDTO.getPostalCode(), 7, "postal code");
+        }
     }
 
 }
