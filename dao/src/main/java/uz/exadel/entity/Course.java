@@ -16,8 +16,10 @@ public class Course {
     @GenericGenerator(name = "uuid2", strategy = "org.hibernate.id.UUIDGenerator")
     private UUID id;
 
+    @Column(length = 15)
     private String code;
 
+    @Column(nullable = false)
     private String name;
 
     private String description;

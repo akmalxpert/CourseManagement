@@ -17,6 +17,7 @@ public class Teacher {
     @GenericGenerator(name = "uuid2", strategy = "org.hibernate.id.UUIDGenerator")
     private UUID id;
 
+    @Column(nullable = false, length = 25)
     private String fullName;
 
     @ElementCollection(targetClass = TeacherPositionEnum.class)

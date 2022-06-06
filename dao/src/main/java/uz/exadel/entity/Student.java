@@ -15,6 +15,7 @@ public class Student {
     @GenericGenerator(name = "uuid2", strategy = "org.hibernate.id.UUIDGenerator")
     private UUID id;
 
+    @Column(nullable = false, length = 25)
     private String fullName;
 
     private UUID groupId;
@@ -25,6 +26,7 @@ public class Student {
     @ManyToMany(fetch = FetchType.LAZY)
     private List<Course> courses;
 
+    @Column(nullable = false)
     private Integer level;
 
 }
