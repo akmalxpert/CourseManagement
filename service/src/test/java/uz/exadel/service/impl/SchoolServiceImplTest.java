@@ -4,6 +4,9 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.InOrder;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -15,8 +18,10 @@ import uz.exadel.exception.MissingMandatoryFieldException;
 import uz.exadel.exception.SchoolNotFoundException;
 import uz.exadel.repository.SchoolRepository;
 
+import java.util.Arrays;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -47,7 +52,7 @@ class SchoolServiceImplTest {
     private SchoolServiceImpl schoolService;
 
     @Test
-    @DisplayName("Success during create School")
+    @DisplayName("Success while creating school")
     void createSuccess() {
         //given
         SchoolDTO schoolDTO = createSchoolDTO();
@@ -65,15 +70,32 @@ class SchoolServiceImplTest {
         inOrder.verifyNoMoreInteractions();
     }
 
-    @Test
-    @DisplayName("Failure during create School with long name")
-    void createFailure_LongerName() {
+    @ParameterizedTest
+    @ValueSource(strings = {"ThisIsStringLongerThanTwentyFiveCharacters"})
+    @DisplayName("Failure while creating school with longer name than specified in the constraints")
+    void createFailure_LongerNameThanSpecifiedInConstraints(String strings) {
         //given
         SchoolDTO schoolDTO = createSchoolDTO();
-        schoolDTO.setName("blablablablablablablablablablablablablablabla");
+        schoolDTO.setName(strings);
 
         School inputSchool = createSchool();
-        inputSchool.setName("blablablablablablablablablablablablablablabla");
+        inputSchool.setName(strings);
+
+        when(schoolRepository.save(inputSchool)).thenThrow(RuntimeException.class);
+
+        assertThrows(RuntimeException.class, () -> schoolService.add(schoolDTO));
+    }
+
+    @ParameterizedTest
+    @MethodSource("blankOrNullStrings")
+    @DisplayName("Failure while creating school with empty, whitespace only or null phone number")
+    void createFailure_EmptyOrNullPhoneNumber(String number) {
+        //given
+        SchoolDTO schoolDTO = createSchoolDTO();
+        schoolDTO.setPhoneNumber(number);
+
+        School inputSchool = createSchool();
+        inputSchool.setPhoneNumber(number);
 
         when(schoolRepository.save(inputSchool)).thenThrow(RuntimeException.class);
 
@@ -81,22 +103,7 @@ class SchoolServiceImplTest {
     }
 
     @Test
-    @DisplayName("Failure during create School with no phone number")
-    void createFailure_NoPhoneNumber() {
-        //given
-        SchoolDTO schoolDTO = createSchoolDTO();
-        schoolDTO.setPhoneNumber(null);
-
-        School inputSchool = createSchool();
-        inputSchool.setPhoneNumber(null);
-
-        when(schoolRepository.save(inputSchool)).thenThrow(RuntimeException.class);
-
-        assertThrows(RuntimeException.class, () -> schoolService.add(schoolDTO));
-    }
-
-    @Test
-    @DisplayName("Success during getting school by id")
+    @DisplayName("Success while getting school by id")
     void getSuccess() {
         School school = createSchool();
         school.setId(TEST_SCHOOL_UUID);
@@ -109,14 +116,22 @@ class SchoolServiceImplTest {
         inOrder.verifyNoMoreInteractions();
     }
 
-    @Test
-    @DisplayName("Failure during getting school without ID")
-    void getFailure_NoId() {
-        assertThrows(MissingMandatoryFieldException.class, () -> schoolService.get(""));
+    @ParameterizedTest
+    @MethodSource("blankOrNullStrings")
+    @DisplayName("Failure while getting school with empty, whitespace only or null ID")
+    void getFailure_EmptyOrNullId(String id) {
+        assertThrows(MissingMandatoryFieldException.class, () -> schoolService.get(id));
     }
 
     @Test
-    @DisplayName("Success during deleting school")
+    @DisplayName("Failure while getting school when not found in the database")
+    void getFailure_NotFoundInDatabase() {
+        when(schoolRepository.findById(TEST_SCHOOL_UUID)).thenReturn(Optional.empty());
+        assertThrows(SchoolNotFoundException.class, () -> schoolService.get(TEST_SCHOOL_ID));
+    }
+
+    @Test
+    @DisplayName("Success while deleting school")
     void deleteSuccess() {
         School school = createSchool();
         school.setId(TEST_SCHOOL_UUID);
@@ -130,15 +145,22 @@ class SchoolServiceImplTest {
         inOrder.verifyNoMoreInteractions();
     }
 
+    @ParameterizedTest
+    @MethodSource("blankOrNullStrings")
+    @DisplayName("Failure while deleting school with empty, whitespace only or null ID")
+    void deleteFailure_EmptyOrNullId(String id) {
+        assertThrows(MissingMandatoryFieldException.class, () -> schoolService.delete(id));
+    }
+
     @Test
-    @DisplayName("Failure during deleting school when not found in the database")
+    @DisplayName("Failure while deleting school when not found in the database")
     void deleteFailure_NotFoundInDatabase() {
         when(schoolRepository.findById(TEST_SCHOOL_UUID)).thenReturn(Optional.empty());
         assertThrows(SchoolNotFoundException.class, () -> schoolService.delete(TEST_SCHOOL_ID));
     }
 
     @Test
-    @DisplayName("Success during updating school")
+    @DisplayName("Success while updating school")
     void updateSuccess() {
         SchoolDTO schoolDTO = createSchoolDTO();
         School school = createSchool();
@@ -152,13 +174,30 @@ class SchoolServiceImplTest {
         inOrder.verifyNoMoreInteractions();
     }
 
-    @Test
-    @DisplayName("Failure during updating school without ID")
-    void updateFailure_NoId() {
+
+    @ParameterizedTest
+    @MethodSource("blankOrNullStrings")
+    @DisplayName("Failure while updating school with empty, whitespace only or null ID")
+    void updateFailure_EmptyOrNullId(String id) {
         SchoolDTO schoolDTO = createSchoolDTO();
-        assertThrows(MissingMandatoryFieldException.class, () -> schoolService.update(schoolDTO, ""));
+        assertThrows(MissingMandatoryFieldException.class, () -> schoolService.update(schoolDTO, id));
     }
 
+    @Test
+    @DisplayName("Failure while updating school when not found in the database")
+    void updateFailure_NotFoundInDatabase() {
+        SchoolDTO schoolDTO = createSchoolDTO();
+        when(schoolRepository.findById(TEST_SCHOOL_UUID)).thenReturn(Optional.empty());
+        assertThrows(SchoolNotFoundException.class, () -> schoolService.update(schoolDTO, TEST_SCHOOL_ID));
+    }
+
+    @Test
+    @DisplayName("Success while getting all schools")
+    void successGetAll() {
+        School school = createSchool();
+        when(schoolRepository.findAll()).thenReturn(Arrays.asList(school));
+        assertEquals(Arrays.asList(school), schoolService.getAll());
+    }
 
     private SchoolDTO createSchoolDTO() {
         SchoolDTO schoolDTO = new SchoolDTO();
@@ -179,4 +218,7 @@ class SchoolServiceImplTest {
         return inputSchool;
     }
 
+    private static Stream<String> blankOrNullStrings() {
+        return Stream.of("", " ", null);
+    }
 }
