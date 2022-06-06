@@ -31,7 +31,7 @@ public class SchoolServiceImpl implements SchoolService {
 
     @Override
     public School get(String id) {
-        if (StringUtils.hasText(id)) {
+        if (!StringUtils.hasText(id)) {
             throw new MissingMandatoryFieldException("Id should not be empty");
         }
 
@@ -45,7 +45,7 @@ public class SchoolServiceImpl implements SchoolService {
 
     @Override
     public String delete(String id) {
-        if (StringUtils.hasText(id)) {
+        if (!StringUtils.hasText(id)) {
             throw new MissingMandatoryFieldException("Id should not be empty");
         }
         UUID uuid = UUID.fromString(id);
@@ -60,7 +60,7 @@ public class SchoolServiceImpl implements SchoolService {
 
     @Override
     public String update(SchoolDTO schoolDTO, String id) {
-        if (StringUtils.hasText(id)) {
+        if (!StringUtils.hasText(id)) {
             throw new MissingMandatoryFieldException("Id should not be empty");
         }
 

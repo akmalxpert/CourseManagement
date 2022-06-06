@@ -26,15 +26,15 @@ public class SchoolValidationServiceImpl implements SchoolValidationService {
     }
 
     private void commonValidate(SchoolDTO schoolDTO) {
-        if (StringUtils.hasText(schoolDTO.getName())) {
+        if (!StringUtils.hasText(schoolDTO.getName())) {
             throw new MissingMandatoryFieldException("School name is missing or empty");
         }
 
-        if (StringUtils.hasText(schoolDTO.getAddress())) {
+        if (!StringUtils.hasText(schoolDTO.getAddress())) {
             throw new MissingMandatoryFieldException("School address is missing or empty");
         }
 
-        if (StringUtils.hasText(schoolDTO.getPhoneNumber())) {
+        if (!StringUtils.hasText(schoolDTO.getPhoneNumber())) {
             throw new MissingMandatoryFieldException("School phone number is missing or empty");
         }
     }
