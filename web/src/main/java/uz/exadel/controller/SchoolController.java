@@ -26,6 +26,7 @@ public class SchoolController {
 
     @GetMapping("/{id}")
     public ResponseEntity<?> getSchoolById(@PathVariable String id) {
+        schoolValidationService.validateGetSchoolById(id);
         return ResponseEntity.ok(schoolService.get(id));
     }
 
@@ -36,12 +37,13 @@ public class SchoolController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteSchool(@PathVariable String id) {
+        schoolValidationService.validateDeleteSchool(id);
         return ResponseEntity.ok(schoolService.delete(id));
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<?> updateSchool(@PathVariable String id, @RequestBody SchoolDTO schoolDTO) {
-        schoolValidationService.validateUpdateSchool(schoolDTO);
+        schoolValidationService.validateUpdateSchool(id, schoolDTO);
         return ResponseEntity.ok(schoolService.update(schoolDTO, id));
     }
 }

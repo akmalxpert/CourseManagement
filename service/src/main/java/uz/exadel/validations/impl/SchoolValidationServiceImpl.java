@@ -6,8 +6,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import uz.exadel.dtos.SchoolDTO;
 import uz.exadel.exception.MissingMandatoryFieldException;
-import uz.exadel.validations.SchoolValidationService;
+import uz.exadel.exception.ValidationException;
 import uz.exadel.utils.ValidatorUtils;
+import uz.exadel.validations.SchoolValidationService;
+
+import java.util.UUID;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -21,8 +24,31 @@ public class SchoolValidationServiceImpl implements SchoolValidationService {
     }
 
     @Override
-    public void validateUpdateSchool(SchoolDTO schoolDTO) {
+    public void validateUpdateSchool(String id, SchoolDTO schoolDTO) {
+        validateId(id);
         commonValidate(schoolDTO);
+        additionalValidation(schoolDTO);
+    }
+
+    @Override
+    public void validateDeleteSchool(String id) {
+        validateId(id);
+    }
+
+    @Override
+    public void validateGetSchoolById(String id) {
+        validateId(id);
+    }
+
+    private void validateId(String id) {
+        if (!StringUtils.hasText(id)) {
+            throw new MissingMandatoryFieldException("Id is missing or empty");
+        }
+        try {
+            UUID uuid = UUID.fromString(id);
+        } catch (IllegalArgumentException ex) {
+            throw new ValidationException("This ID is not valid for the system");
+        }
     }
 
     private void commonValidate(SchoolDTO schoolDTO) {

@@ -31,10 +31,6 @@ public class SchoolServiceImpl implements SchoolService {
 
     @Override
     public School get(String id) {
-        if (!StringUtils.hasText(id)) {
-            throw new MissingMandatoryFieldException("Id should not be empty");
-        }
-
         School school = schoolRepository.findById(UUID.fromString(id)).orElse(null);
         if (school == null) {
             throw new SchoolNotFoundException();
@@ -45,9 +41,6 @@ public class SchoolServiceImpl implements SchoolService {
 
     @Override
     public String delete(String id) {
-        if (!StringUtils.hasText(id)) {
-            throw new MissingMandatoryFieldException("Id should not be empty");
-        }
         UUID uuid = UUID.fromString(id);
         School school = schoolRepository.findById(uuid).orElse(null);
         if (school == null) {
@@ -60,10 +53,6 @@ public class SchoolServiceImpl implements SchoolService {
 
     @Override
     public String update(SchoolDTO schoolDTO, String id) {
-        if (!StringUtils.hasText(id)) {
-            throw new MissingMandatoryFieldException("Id should not be empty");
-        }
-
         School school = schoolRepository.findById(UUID.fromString(id)).orElse(null);
         if (school == null) {
             throw new SchoolNotFoundException();
