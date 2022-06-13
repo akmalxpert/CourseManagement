@@ -2,7 +2,7 @@ package uz.exadel.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import uz.exadel.dtos.ResponseItem;
+import uz.exadel.dtos.ResponseData;
 import uz.exadel.dtos.SchoolDTO;
 import uz.exadel.entity.School;
 import uz.exadel.exception.SchoolNotFoundException;
@@ -20,26 +20,26 @@ public class SchoolServiceImpl implements SchoolService {
     private final SchoolRepository schoolRepository;
 
     @Override
-    public ResponseItem add(SchoolDTO schoolDTO) {
+    public ResponseData add(SchoolDTO schoolDTO) {
         //TODO ? mapper or method
         School school = new School();
         school.fromDTO(schoolDTO);
         schoolRepository.save(school);
-        return new ResponseItem(null, "Save success", true);
+        return new ResponseData(null, "Save success");
     }
 
     @Override
-    public ResponseItem get(String id) {
+    public ResponseData get(String id) {
         School school = schoolRepository.findById(UUID.fromString(id)).orElse(null);
         if (school == null) {
             throw new SchoolNotFoundException();
         }
 
-        return new ResponseItem(school);
+        return new ResponseData(school);
     }
 
     @Override
-    public ResponseItem delete(String id) {
+    public ResponseData delete(String id) {
         UUID uuid = UUID.fromString(id);
         School school = schoolRepository.findById(uuid).orElse(null);
         if (school == null) {
@@ -47,11 +47,11 @@ public class SchoolServiceImpl implements SchoolService {
         }
 
         schoolRepository.deleteById(uuid);
-        return new ResponseItem(null, "Delete success", true);
+        return new ResponseData(null, "Delete success");
     }
 
     @Override
-    public ResponseItem update(SchoolDTO schoolDTO, String id) {
+    public ResponseData update(SchoolDTO schoolDTO, String id) {
         School school = schoolRepository.findById(UUID.fromString(id)).orElse(null);
         if (school == null) {
             throw new SchoolNotFoundException();
@@ -60,12 +60,12 @@ public class SchoolServiceImpl implements SchoolService {
         School updatedSchool = school.fromDTO(schoolDTO);
         schoolRepository.save(updatedSchool);
 
-        return new ResponseItem(null, "Update success", true);
+        return new ResponseData(null, "Update success");
     }
 
     @Override
-    public ResponseItem getAll() {
+    public ResponseData getAll() {
         List<School> schools = schoolRepository.findAll();
-        return new ResponseItem(schools);
+        return new ResponseData(schools);
     }
 }

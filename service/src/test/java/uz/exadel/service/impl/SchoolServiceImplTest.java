@@ -11,7 +11,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-import uz.exadel.dtos.ResponseItem;
+import uz.exadel.dtos.ResponseData;
 import uz.exadel.dtos.SchoolDTO;
 import uz.exadel.entity.School;
 import uz.exadel.exception.SchoolNotFoundException;
@@ -60,11 +60,11 @@ class SchoolServiceImplTest {
         outputSchool.setId(UUID.randomUUID());
 
         //when
-        ResponseItem actualResult = schoolService.add(schoolDTO);
+        ResponseData actualResult = schoolService.add(schoolDTO);
 
         //then
         inOrder.verify(schoolRepository, times(1)).save(inputSchool);
-        assertEquals("Save success", actualResult.getMessage());
+        assertEquals("Save success", actualResult.getDetail());
         inOrder.verifyNoMoreInteractions();
     }
 
@@ -91,7 +91,7 @@ class SchoolServiceImplTest {
         school.setId(TEST_SCHOOL_UUID);
         when(schoolRepository.findById(TEST_SCHOOL_UUID)).thenReturn(Optional.of(school));
 
-        ResponseItem actualResult = schoolService.get(TEST_SCHOOL_ID);
+        ResponseData actualResult = schoolService.get(TEST_SCHOOL_ID);
 
         inOrder.verify(schoolRepository, times(1)).findById(TEST_SCHOOL_UUID);
         assertEquals(school, actualResult.getData());
@@ -112,10 +112,10 @@ class SchoolServiceImplTest {
         school.setId(TEST_SCHOOL_UUID);
         when(schoolRepository.findById(TEST_SCHOOL_UUID)).thenReturn(Optional.of(school));
 
-        ResponseItem actualResult = schoolService.delete(TEST_SCHOOL_ID);
+        ResponseData actualResult = schoolService.delete(TEST_SCHOOL_ID);
 
         inOrder.verify(schoolRepository, times(1)).findById(TEST_SCHOOL_UUID);
-        assertEquals("Delete success", actualResult.getMessage());
+        assertEquals("Delete success", actualResult.getDetail());
         inOrder.verify(schoolRepository).deleteById(TEST_SCHOOL_UUID);
         inOrder.verifyNoMoreInteractions();
     }
@@ -134,11 +134,11 @@ class SchoolServiceImplTest {
         School school = createSchool();
         when(schoolRepository.findById(TEST_SCHOOL_UUID)).thenReturn(Optional.of(school));
 
-        ResponseItem actualResult = schoolService.update(schoolDTO, TEST_SCHOOL_ID);
+        ResponseData actualResult = schoolService.update(schoolDTO, TEST_SCHOOL_ID);
 
         inOrder.verify(schoolRepository, times(1)).findById(TEST_SCHOOL_UUID);
         inOrder.verify(schoolRepository, times(1)).save(school);
-        assertEquals("Update success", actualResult.getMessage());
+        assertEquals("Update success", actualResult.getDetail());
         inOrder.verifyNoMoreInteractions();
     }
 
@@ -155,7 +155,7 @@ class SchoolServiceImplTest {
     void successGetAll() {
         School school = createSchool();
         when(schoolRepository.findAll()).thenReturn(Arrays.asList(school));
-        ResponseItem acutalResult = schoolService.getAll();
+        ResponseData acutalResult = schoolService.getAll();
         assertEquals(Arrays.asList(school), acutalResult.getData());
     }
 

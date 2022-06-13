@@ -9,12 +9,17 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class ResponseItem {
+public class ResponseData {
     private Object data;
-    private String message;
-    private Boolean success;
+    private String detail;
+    private Integer statusCode = 200;
 
-    public ResponseItem(Object data) {
+    public ResponseData(Object data) {
         this.data = data;
+    }
+
+    public ResponseData(Object data, String detail) {
+        this.data = data;
+        this.detail = detail;
     }
 }
