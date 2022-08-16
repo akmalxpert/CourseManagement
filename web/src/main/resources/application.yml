@@ -14,5 +14,8 @@ spring:
   mvc:
     pathmatch:
       matching-strategy: ANT_PATH_MATCHER
+    view:
+      suffix: .jsp
+      prefix: /WEB-INF/views/
 server:
   port: 8123
