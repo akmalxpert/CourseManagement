@@ -1,0 +1,39 @@
+services:
+  course-app:
+    container_name: course-app
+    build: .
+    image: course-app:latest
+    ports:
+      - 8081:8080
+    depends_on:
+      course_db:
+        condition: service_healthy
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://course_db:5432/course_app_db
+    networks:
+      - spring-cloud-network
+
+  course_db:
+    container_name: course_db
+    image: postgres
+    ports:
+      - 5435:5432
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=This28isdb
+      - POSTGRES_DB=course_app_db
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U postgres" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+    networks:
+      - spring-cloud-network
+volumes:
+  db-data:
+networks:
+  spring-cloud-network:
+    driver: bridge
