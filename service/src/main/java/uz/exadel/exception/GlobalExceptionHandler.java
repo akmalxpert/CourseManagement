@@ -1,6 +1,5 @@
 package uz.exadel.exception;
 
-import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,7 +11,6 @@ import uz.exadel.dtos.ResponseData;
 import static org.springframework.http.HttpStatus.*;
 
 @RestControllerAdvice
-@RequiredArgsConstructor
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(value = {MissingMandatoryFieldException.class})

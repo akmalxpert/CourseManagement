@@ -1,6 +1,5 @@
 package uz.exadel.service.impl;
 
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import uz.exadel.dtos.ResponseData;
 import uz.exadel.dtos.SchoolDTO;
@@ -15,13 +14,15 @@ import java.util.UUID;
 
 @Service
 @Transactional
-@RequiredArgsConstructor
 public class SchoolServiceImpl implements SchoolService {
     private final SchoolRepository schoolRepository;
 
+    public SchoolServiceImpl(SchoolRepository schoolRepository) {
+        this.schoolRepository = schoolRepository;
+    }
+
     @Override
     public ResponseData add(SchoolDTO schoolDTO) {
-        //TODO ? mapper or method
         School school = new School();
         school.fromDTO(schoolDTO);
         schoolRepository.save(school);

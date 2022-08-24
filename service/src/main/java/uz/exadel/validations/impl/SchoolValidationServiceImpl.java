@@ -1,7 +1,5 @@
 package uz.exadel.validations.impl;
 
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import uz.exadel.dtos.SchoolDTO;
@@ -12,8 +10,6 @@ import uz.exadel.validations.SchoolValidationService;
 
 import java.util.UUID;
 
-@Slf4j
-@RequiredArgsConstructor
 @Service
 public class SchoolValidationServiceImpl implements SchoolValidationService {
 

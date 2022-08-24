@@ -1,6 +1,5 @@
 package uz.exadel.controller;
 
-import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import uz.exadel.dtos.ResponseData;
@@ -10,12 +9,16 @@ import uz.exadel.validations.SchoolValidationService;
 
 @RestController
 @RequestMapping("/api/school")
-@RequiredArgsConstructor
 @CrossOrigin
 public class SchoolController {
     private final SchoolService schoolService;
 
     private final SchoolValidationService schoolValidationService;
+
+    public SchoolController(SchoolService schoolService, SchoolValidationService schoolValidationService) {
+        this.schoolService = schoolService;
+        this.schoolValidationService = schoolValidationService;
+    }
 
     @PostMapping
     public ResponseEntity<ResponseData> addSchool(@RequestBody SchoolDTO schoolDTO) {

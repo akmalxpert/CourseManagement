@@ -1,16 +1,19 @@
 package uz.exadel.entity;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.annotations.GenericGenerator;
 import uz.exadel.enums.TeacherPositionEnum;
 
 import javax.persistence.*;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
 
 @Entity
-@Data
+@Getter
+@Setter
 public class Teacher {
     @Id
     @GeneratedValue(generator = "uuid2")
@@ -34,4 +37,17 @@ public class Teacher {
     @ManyToOne(cascade = {CascadeType.PERSIST}, fetch = FetchType.EAGER)
     @JoinColumn(name = "schoolId", updatable = false, insertable = false)
     private School school;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Teacher teacher = (Teacher) o;
+        return Objects.equals(id, teacher.id) && Objects.equals(fullName, teacher.fullName);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, fullName);
+    }
 }
