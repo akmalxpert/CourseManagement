@@ -5,6 +5,7 @@ import uz.exadel.dtos.ResponseData;
 import uz.exadel.dtos.SchoolDTO;
 import uz.exadel.entity.School;
 import uz.exadel.exception.SchoolNotFoundException;
+import uz.exadel.mapper.SchoolMapper;
 import uz.exadel.repository.SchoolRepository;
 import uz.exadel.service.SchoolService;
 
@@ -23,8 +24,7 @@ public class SchoolServiceImpl implements SchoolService {
 
     @Override
     public ResponseData add(SchoolDTO schoolDTO) {
-        School school = new School();
-        school.fromDTO(schoolDTO);
+        School school = SchoolMapper.INSTANCE.schoolToSchoolDTO(schoolDTO);
         schoolRepository.save(school);
         return new ResponseData(null, "Save success");
     }
@@ -58,7 +58,7 @@ public class SchoolServiceImpl implements SchoolService {
             throw new SchoolNotFoundException();
         }
 
-        School updatedSchool = school.fromDTO(schoolDTO);
+        School updatedSchool = SchoolMapper.INSTANCE.schoolToSchoolDTO(schoolDTO);
         schoolRepository.save(updatedSchool);
 
         return new ResponseData(null, "Update success");

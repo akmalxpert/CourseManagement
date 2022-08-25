@@ -3,7 +3,6 @@ package uz.exadel.entity;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.GenericGenerator;
-import uz.exadel.dtos.SchoolDTO;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -32,14 +31,6 @@ public class School {
 
     @Column(length = 7)
     private String postalCode;
-
-    public School fromDTO(SchoolDTO schoolDTO) {
-        this.setAddress(schoolDTO.getAddress());
-        this.setName(schoolDTO.getName());
-        this.setPhoneNumber(schoolDTO.getPhoneNumber());
-        this.setPostalCode(schoolDTO.getPostalCode());
-        return this;
-    }
 
     @Override
     public boolean equals(Object o) {
