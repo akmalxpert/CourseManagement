@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta charset="UTF-8">
@@ -34,26 +34,56 @@
     </div>
 </nav>
 <section class="container">
-    <h2 class="text-center mt-3">Add New School</h2>
-    <form action="#" th:action="@{/school/save}" th:object="${schoolDTO}"
-          method="POST" class="container col-7">
-        <input type="text" th:field="*{name}"
-               placeholder="Name" class="form-control mb-4 col-4">
+    <div th:switch="${isNew}">
+        <div th:case="true">
+            <h2 class="text-center mt-3">Add New School</h2>
+            <form action="#" th:action="@{/school/save}" th:object="${schoolDTO}"
+                  method="POST" class="container col-7">
+                <input type="text" th:field="*{name}"
+                       placeholder="Name" class="form-control mb-4 col-4">
 
-        <input type="text" th:field="*{address}"
-               placeholder="Address" class="form-control mb-4 col-4">
+                <input type="text" th:field="*{address}"
+                       placeholder="Address" class="form-control mb-4 col-4">
 
-        <input type="text" th:field="*{phoneNumber}"
-               placeholder="Phone Number" class="form-control mb-4 col-4">
+                <input type="text" th:field="*{phoneNumber}"
+                       placeholder="Phone Number" class="form-control mb-4 col-4">
 
-        <input type="text" th:field="*{postalCode}"
-               placeholder="Postal Code" class="form-control mb-4 col-4">
+                <input type="text" th:field="*{postalCode}"
+                       placeholder="Postal Code" class="form-control mb-4 col-4">
 
-        <div class="d-flex justify-content-center">
-            <button type="submit" class="btn btn-success col-3 mx-3"> Save</button>
-            <a th:href="@{/school}" class="btn btn-warning col-3 mx-3"> Back to School List</a>
+                <div class="d-flex justify-content-center">
+                    <button type="submit" class="btn btn-success col-3 mx-3"> Save</button>
+                    <a th:href="@{/school}" class="btn btn-warning col-3 mx-3"> Back to School List</a>
+                </div>
+            </form>
         </div>
-    </form>
+
+        <div th:case="false">
+            <h2 class="text-center mt-3">Update School</h2>
+            <form action="#" th:action="@{'/school/update/' + ${schoolId}}" th:object="${school}"
+                  th:method="PUT" class="container col-7">
+
+                <input name="_method" type="hidden" value="PUT" />
+
+                <input type="text" th:field="*{name}"
+                       placeholder="Name" class="form-control mb-4 col-4">
+
+                <input type="text" th:field="*{address}"
+                       placeholder="Address" class="form-control mb-4 col-4">
+
+                <input type="text" th:field="*{phoneNumber}"
+                       placeholder="Phone Number" class="form-control mb-4 col-4">
+
+                <input type="text" th:field="*{postalCode}"
+                       placeholder="Postal Code" class="form-control mb-4 col-4">
+
+                <div class="d-flex justify-content-center">
+                    <button type="submit" class="btn btn-success col-3 mx-3"> Save</button>
+                    <a th:href="@{/school}" class="btn btn-warning col-3 mx-3"> Back to School List</a>
+                </div>
+            </form>
+        </div>
+    </div>
 
 </section>
 </body>

@@ -19,3 +19,11 @@ spring:
     view:
       suffix: .jsp
       prefix: /WEB-INF/views/
+    hiddenmethod:
+      filter:
+        enabled: true
+logging:
+  level:
+    org:
+      springframework:
+        web: debug

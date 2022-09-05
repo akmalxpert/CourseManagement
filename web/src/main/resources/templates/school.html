@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta charset="UTF-8">
@@ -49,10 +49,14 @@
             <td th:text="${school.address}"></td>
             <td th:text="${school.phoneNumber}"></td>
             <td th:text="${school.postalCode}"></td>
+            <td>
+                <a th:href="@{/school/update/{id}(id=${school.id})}" class="btn btn-warning">Update</a>
+                <a th:href="@{/school/delete/{id}(id=${school.id})}" class="btn btn-danger">Delete</a>
+            </td>
         </tr>
         </tbody>
     </table>
-    <a th:href = "@{/school/new}" class="btn btn-info mb-3"> Add School </a>
+    <a th:href="@{/school/new}" class="btn btn-info mb-3"> Add School </a>
 </section>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"

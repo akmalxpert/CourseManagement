@@ -5,10 +5,7 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import uz.exadel.dtos.ResponseData;
 import uz.exadel.dtos.SchoolDTO;
 import uz.exadel.entity.School;
@@ -41,6 +38,7 @@ public class SchoolViewController {
     public String create(Model model) {
         SchoolDTO schoolDTO = new SchoolDTO();
         model.addAttribute("schoolDTO", schoolDTO);
+        model.addAttribute("isNew", true);
         return "new_school";
     }
 
@@ -50,4 +48,27 @@ public class SchoolViewController {
         return "redirect:/school";
     }
 
+    @GetMapping("/update/{id}")
+    public String update(@PathVariable(value = "id") String id, Model model) {
+        logger.info("UPDATE Request came with ID ===========> " + id);
+        ResponseEntity<ResponseData> response = schoolController.getSchoolById(id);
+        Object school = Objects.requireNonNull(response.getBody()).getData();
+        logger.info("SCHOOL OBJECT RECEIVED FROM BACKEND: " + school.getClass());
+        model.addAttribute("school", school);
+        model.addAttribute("schoolId", ((School) school).getId().toString());
+        model.addAttribute("isNew", false);
+        return "new_school";
+    }
+
+    @PutMapping("/update/{id}")
+    public String update(@PathVariable(value = "id") String id, @ModelAttribute("school") SchoolDTO schoolDTO) {
+        schoolController.updateSchool(id, schoolDTO);
+        return "redirect:/school";
+    }
+
+    @GetMapping("/delete/{id}")
+    public String delete(@PathVariable(value = "id") String id, Model model) {
+        schoolController.deleteSchool(id);
+        return "redirect:/school";
+    }
 }

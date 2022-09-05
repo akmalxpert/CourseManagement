@@ -1,6 +1,7 @@
 package uz.exadel.service.impl;
 
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 import uz.exadel.dtos.ResponseData;
 import uz.exadel.dtos.SchoolDTO;
 import uz.exadel.entity.School;
@@ -53,13 +54,19 @@ public class SchoolServiceImpl implements SchoolService {
 
     @Override
     public ResponseData update(SchoolDTO schoolDTO, String id) {
-        School school = schoolRepository.findById(UUID.fromString(id)).orElse(null);
+        UUID uuid = UUID.fromString(id);
+        School school = schoolRepository.findById(uuid).orElse(null);
         if (school == null) {
             throw new SchoolNotFoundException();
         }
 
-        School updatedSchool = SchoolMapper.INSTANCE.schoolToSchoolDTO(schoolDTO);
-        schoolRepository.save(updatedSchool);
+        school.setName(schoolDTO.getName());
+        school.setPhoneNumber(schoolDTO.getPhoneNumber());
+        school.setAddress(schoolDTO.getAddress());
+        if (StringUtils.hasText(schoolDTO.getAddress())) {
+            school.setPostalCode(schoolDTO.getPostalCode());
+        }
+        schoolRepository.save(school);
 
         return new ResponseData(null, "Update success");
     }
