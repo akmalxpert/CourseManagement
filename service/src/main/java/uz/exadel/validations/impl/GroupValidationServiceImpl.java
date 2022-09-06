@@ -21,6 +21,13 @@ public class GroupValidationServiceImpl implements GroupValidationService {
     }
 
     @Override
+    public void validateGetGroupBySchoolIdAndFaculty(String schoolId, String faculty) {
+        logger.info("Validating schoolId");
+        ValidatorUtils.validateId(schoolId);
+        validateFaculty(faculty);
+    }
+
+    @Override
     public void validateUpdateGroup(String id, GroupDTO groupDTO) {
         ValidatorUtils.validateId(id);
         commonValidate(groupDTO);
@@ -53,15 +60,19 @@ public class GroupValidationServiceImpl implements GroupValidationService {
             throw new MissingMandatoryFieldException("SchoolId");
         }
 
-        if (!StringUtils.hasText(groupDTO.getFaculty())) {
-            throw new MissingMandatoryFieldException("Faculty");
-        }
-
         logger.info("Validating School ID of groupDTO");
         ValidatorUtils.validateId(groupDTO.getSchoolId());
 
+        validateFaculty(groupDTO.getFaculty());
+    }
+
+    private void validateFaculty(String faculty) {
+        if (!StringUtils.hasText(faculty)) {
+            throw new MissingMandatoryFieldException("Faculty");
+        }
+
         try {
-            FacultyEnum.valueOf(groupDTO.getFaculty());
+            FacultyEnum.valueOf(faculty);
         } catch (IllegalArgumentException exception) {
             throw new ValidationException("This Faculty is not valid for the system");
         }

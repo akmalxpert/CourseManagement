@@ -65,6 +65,16 @@ public class GroupValidationServiceImplTest {
     }
 
     @ParameterizedTest
+    @MethodSource("blankOrNullStrings")
+    @DisplayName("Failure while updating group with empty, whitespace only or null faculty")
+    void validateGetBySchoolIdAndFacultyFailure_EmptyOrNullFaculty(String faculty) {
+        MissingMandatoryFieldException exception = assertThrows(MissingMandatoryFieldException.class,
+                () -> groupValidationService.validateGetGroupBySchoolIdAndFaculty(TEST_GROUP_SCHOOL_ID, faculty));
+        assertEquals("Faculty is missing or empty", exception.getMessage());
+    }
+
+
+    @ParameterizedTest
     @ValueSource(strings = {"test1", "qwertyui", "sample-sample-sample"})
     @DisplayName("Failure while updating group with invalid ID")
     void validateUpdateFailure_InvalidId(String id) {
