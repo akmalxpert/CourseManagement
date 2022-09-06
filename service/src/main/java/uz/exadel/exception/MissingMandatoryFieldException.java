@@ -5,8 +5,8 @@ package uz.exadel.exception;
  */
 public class MissingMandatoryFieldException extends RuntimeException {
 
-    public MissingMandatoryFieldException(String message) {
-        super(message);
+    public MissingMandatoryFieldException(String fieldName) {
+        super(fieldName + " is missing or empty");
     }
 
 }

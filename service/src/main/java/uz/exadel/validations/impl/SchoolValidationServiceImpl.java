@@ -4,11 +4,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import uz.exadel.dtos.SchoolDTO;
 import uz.exadel.exception.MissingMandatoryFieldException;
-import uz.exadel.exception.ValidationException;
 import uz.exadel.utils.ValidatorUtils;
 import uz.exadel.validations.SchoolValidationService;
-
-import java.util.UUID;
 
 @Service
 public class SchoolValidationServiceImpl implements SchoolValidationService {
@@ -21,43 +18,32 @@ public class SchoolValidationServiceImpl implements SchoolValidationService {
 
     @Override
     public void validateUpdateSchool(String id, SchoolDTO schoolDTO) {
-        validateId(id);
+        ValidatorUtils.validateId(id);
         commonValidate(schoolDTO);
         additionalValidation(schoolDTO);
     }
 
     @Override
     public void validateDeleteSchool(String id) {
-        validateId(id);
+        ValidatorUtils.validateId(id);
     }
 
     @Override
     public void validateGetSchoolById(String id) {
-        validateId(id);
-    }
-
-    private void validateId(String id) {
-        if (!StringUtils.hasText(id)) {
-            throw new MissingMandatoryFieldException("Id is missing or empty");
-        }
-        try {
-            UUID uuid = UUID.fromString(id);
-        } catch (IllegalArgumentException ex) {
-            throw new ValidationException("This ID is not valid for the system");
-        }
+        ValidatorUtils.validateId(id);
     }
 
     private void commonValidate(SchoolDTO schoolDTO) {
         if (!StringUtils.hasText(schoolDTO.getName())) {
-            throw new MissingMandatoryFieldException("School name is missing or empty");
+            throw new MissingMandatoryFieldException("School name");
         }
 
         if (!StringUtils.hasText(schoolDTO.getAddress())) {
-            throw new MissingMandatoryFieldException("School address is missing or empty");
+            throw new MissingMandatoryFieldException("School address");
         }
 
         if (!StringUtils.hasText(schoolDTO.getPhoneNumber())) {
-            throw new MissingMandatoryFieldException("School phone number is missing or empty");
+            throw new MissingMandatoryFieldException("School phone number");
         }
     }
 

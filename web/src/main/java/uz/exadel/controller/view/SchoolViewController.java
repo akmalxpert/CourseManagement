@@ -1,4 +1,4 @@
-package uz.exadel.controller;
+package uz.exadel.controller.view;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import uz.exadel.controller.api.SchoolController;
 import uz.exadel.dtos.ResponseData;
 import uz.exadel.dtos.SchoolDTO;
 import uz.exadel.entity.School;
