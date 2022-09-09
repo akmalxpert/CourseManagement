@@ -28,7 +28,6 @@ public class GroupServiceImpl implements GroupService {
         this.schoolRepository = schoolRepository;
     }
 
-
     @Override
     public ResponseData add(GroupDTO groupDTO) {
         String schoolId = groupDTO.getSchoolId();

@@ -15,9 +15,10 @@ import uz.exadel.dtos.ResponseData;
 import uz.exadel.dtos.SchoolDTO;
 import uz.exadel.entity.School;
 import uz.exadel.exception.SchoolNotFoundException;
+import uz.exadel.mapper.SchoolMapper;
 import uz.exadel.repository.SchoolRepository;
 
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -55,9 +56,6 @@ class SchoolServiceImplTest {
         //given
         SchoolDTO schoolDTO = createSchoolDTO();
         School inputSchool = createSchool();
-
-        School outputSchool = new School();
-        outputSchool.setId(UUID.randomUUID());
 
         //when
         ResponseData actualResult = schoolService.add(schoolDTO);
@@ -154,28 +152,23 @@ class SchoolServiceImplTest {
     @DisplayName("Success while getting all schools")
     void successGetAll() {
         School school = createSchool();
-        when(schoolRepository.findAll()).thenReturn(Arrays.asList(school));
-        ResponseData acutalResult = schoolService.getAll();
-        assertEquals(Arrays.asList(school), acutalResult.getData());
+        when(schoolRepository.findAll()).thenReturn(Collections.singletonList(school));
+        ResponseData actualResult = schoolService.getAll();
+        assertEquals(Collections.singletonList(school), actualResult.getData());
     }
 
     private SchoolDTO createSchoolDTO() {
-        SchoolDTO schoolDTO = new SchoolDTO();
-        schoolDTO.setName(TEST_SCHOOL_NAME);
-        schoolDTO.setAddress(TEST_SCHOOL_ADDRESS);
-        schoolDTO.setPhoneNumber(TEST_SCHOOL_PHONE_NUMBER);
-        schoolDTO.setPostalCode(TEST_SCHOOL_POSTAL_CODE);
-
-        return schoolDTO;
+        return new SchoolDTO(
+                TEST_SCHOOL_NAME,
+                TEST_SCHOOL_ADDRESS,
+                TEST_SCHOOL_PHONE_NUMBER,
+                TEST_SCHOOL_POSTAL_CODE
+        );
     }
 
     private School createSchool() {
-        School inputSchool = new School();
-        inputSchool.setName(TEST_SCHOOL_NAME);
-        inputSchool.setAddress(TEST_SCHOOL_ADDRESS);
-        inputSchool.setPhoneNumber(TEST_SCHOOL_PHONE_NUMBER);
-        inputSchool.setPostalCode(TEST_SCHOOL_POSTAL_CODE);
-        return inputSchool;
+        SchoolDTO schoolDTO = createSchoolDTO();
+        return SchoolMapper.INSTANCE.schoolToSchoolDTO(schoolDTO);
     }
 
 }

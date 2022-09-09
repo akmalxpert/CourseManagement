@@ -19,10 +19,13 @@ public class Group {
     @GenericGenerator(name = "uuid2", strategy = "org.hibernate.id.UUIDGenerator")
     private UUID id;
 
+    @Column(nullable = false)
     private String name;
 
+    @Column(nullable = false)
     private Integer level;
 
+    @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private FacultyEnum faculty;
 
