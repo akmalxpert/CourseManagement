@@ -65,7 +65,7 @@ public class GroupValidationServiceImplTest {
     }
 
     @ParameterizedTest
-    @MethodSource("blankOrNullStrings")
+    @ValueSource(strings = {"", " "})
     @DisplayName("Failure while updating group with empty, whitespace only or null faculty")
     void validateGetBySchoolIdAndFacultyFailure_EmptyOrNullFaculty(String faculty) {
         MissingMandatoryFieldException exception = assertThrows(MissingMandatoryFieldException.class,
