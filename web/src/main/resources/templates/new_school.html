@@ -12,26 +12,8 @@
 
 </head>
 <body>
-<nav class="navbar navbar-expand-lg navbar-light" style="background-color: #ddeeff;">
-    <div class="container-fluid">
-        <a href="#" class="navbar-brand">AS School</a>
-        <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarCollapse">
-            <div class="navbar-nav">
-                <a th:href="@{/}" class="nav-item nav-link">Home</a>
-                <a th:href="@{/school}" class="nav-item nav-link active">School</a>
-                <a href="#" class="nav-item nav-link">Group</a>
-                <a href="#" class="nav-item nav-link">Course</a>
-                <a href="#" class="nav-item nav-link">Student</a>
-                <a href="#" class="nav-item nav-link">Teacher</a>
-            </div>
-            <div class="navbar-nav ms-auto">
-                <a href="#" class="nav-item nav-link disabled">Login</a>
-            </div>
-        </div>
-    </div>
+<nav th:insert="fragments/navbar :: navbar">
+
 </nav>
 <section class="container">
     <div th:switch="${isNew}">
