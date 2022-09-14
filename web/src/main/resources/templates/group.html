@@ -48,14 +48,29 @@
 
                                     <input name="_method" type="hidden" value="PUT"/>
 
-                                    <input type="text" th:field="*{name}"
-                                           placeholder="Name" class="form-control mb-4">
+                                    <label class="form-label" for="name">Name</label>
+                                    <input id="name" type="text" th:field="*{name}"
+                                           class="form-control mb-4">
 
-                                    <input type="number" th:field="*{level}"
-                                           placeholder="Level" class="form-control mb-4">
+                                    <label class="form-label" for="level">Level</label>
+                                    <input id="level" type="number" th:field="*{level}"
+                                           class="form-control mb-4">
 
-                                    <input type="text" th:field="*{faculty}"
-                                           placeholder="Faculty" class="form-control mb-4">
+                                    <label class="form-label" for="faculty">Faculty</label>
+                                    <select th:field="*{faculty}" id="faculty" class="form-select form-control mb-4">
+                                        <option th:value="BUSINESS_INFORMATION_SYSTEMS">BIS</option>
+                                        <option th:value="FINANCE">Finance</option>
+                                        <option th:value="ECONOMICS_WITH_FINANCE">Economics with Finance</option>
+                                        <option th:value="BUSINESS_MANAGEMENT">Business Management</option>
+                                        <option th:value="COMMERCIAL_LAW">Commercial Law</option>
+                                    </select>
+
+                                    <label class="form-label" for="school">Select School</label>
+                                    <select id="school" th:field="*{schoolId}" class="form-select form-control mb-4">
+                                        <option th:each="school : ${schoolList}"
+                                                th:value="${school.id}"
+                                                th:text="${school.name}"/>
+                                    </select>
 
                                     <div class="d-flex justify-content-center">
                                         <button type="submit" class="btn btn-success col-3 mx-3"> Save</button>
@@ -73,7 +88,9 @@
         </tr>
         </tbody>
     </table>
-    <a class="btn btn-info mb-3" data-toggle="modal" data-target="#addModal"> Add New Group </a>
+
+
+    <a class="btn btn-info mb-3" data-bs-toggle="modal" data-bs-target="#addModal"> Add New Group </a>
 
     <div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-labelledby="addModalLabel"
          aria-hidden="true">
@@ -81,21 +98,36 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="addModalLabel">Add New Group</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
                 <div class="modal-body">
                     <form action="#" th:action="@{/group/save}" th:object="${groupDTO}"
                           method="POST" class="container col-7">
-                        <input type="text" th:field="*{name}"
-                               placeholder="Name" class="form-control mb-4">
+                        <label class="form-label" for="nameForSave">Name</label>
+                        <input id="nameForSave" type="text" th:field="*{name}"
+                               class="form-control mb-4">
 
-                        <input type="number" th:field="*{level}"
-                               placeholder="Level" class="form-control mb-4">
+                        <label class="form-label" for="levelForSave">Level</label>
+                        <input id="levelForSave" type="number" th:field="*{level}"
+                               class="form-control mb-4">
 
-                        <input type="text" th:field="*{faculty}"
-                               placeholder="Faculty" class="form-control mb-4">
+                        <label class="form-label" for="facultyForSave">Faculty</label>
+                        <select th:field="*{faculty}" id="facultyForSave" class="form-select form-control mb-4">
+                            <option th:value="BUSINESS_INFORMATION_SYSTEMS">BIS</option>
+                            <option th:value="FINANCE">Finance</option>
+                            <option th:value="ECONOMICS_WITH_FINANCE">Economics with Finance</option>
+                            <option th:value="BUSINESS_MANAGEMENT">Business Management</option>
+                            <option th:value="COMMERCIAL_LAW">Commercial Law</option>
+                        </select>
+
+                        <label class="form-label" for="schoolForSave">Select School</label>
+                        <select id="schoolForSave" th:field="*{schoolId}" class="form-select form-control mb-4">
+                            <option th:each="school : ${schoolList}"
+                                    th:value="${school.id}"
+                                    th:text="${school.name}"/>
+                        </select>
 
                         <div class="d-flex justify-content-center">
                             <button type="submit" class="btn btn-success col-3 mx-3"> Save</button>

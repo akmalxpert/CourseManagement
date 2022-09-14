@@ -1,7 +1,5 @@
 package uz.exadel.controller.view;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -10,7 +8,9 @@ import uz.exadel.controller.api.GroupController;
 import uz.exadel.controller.api.SchoolController;
 import uz.exadel.dtos.GroupDTO;
 import uz.exadel.dtos.ResponseData;
+import uz.exadel.entity.School;
 
+import java.util.List;
 import java.util.Objects;
 
 
@@ -19,7 +19,6 @@ import java.util.Objects;
 public class GroupViewController {
     private final GroupController groupController;
     private final SchoolController schoolController;
-    private static final Logger logger = LogManager.getLogger(GroupViewController.class);
 
 
     public GroupViewController(GroupController groupController, SchoolController schoolController) {
@@ -34,7 +33,10 @@ public class GroupViewController {
         model.addAttribute("groupList", list);
         model.addAttribute("groupDTO", new GroupDTO());
 
-        ResponseEntity<ResponseData> schools = schoolController.getSchools();
+        ResponseEntity<ResponseData> schoolsResponse = schoolController.getSchools();
+        Object schoolList = Objects.requireNonNull(schoolsResponse.getBody()).getData();
+        model.addAttribute("schoolList", (List<School>) schoolList);
+
         return "group";
     }
 
@@ -55,6 +57,4 @@ public class GroupViewController {
         groupController.deleteGroup(id);
         return "redirect:/school";
     }
-
-
 }

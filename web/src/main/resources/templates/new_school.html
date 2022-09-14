@@ -21,16 +21,21 @@
             <h2 class="text-center mt-3">Add New School</h2>
             <form action="#" th:action="@{/school/save}" th:object="${schoolDTO}"
                   method="POST" class="container col-7">
-                <input type="text" th:field="*{name}"
+
+                <label for="name" class="form-label">Name</label>
+                <input id="name" type="text" th:field="*{name}"
                        placeholder="Name" class="form-control mb-4 col-4">
 
-                <input type="text" th:field="*{address}"
+                <label for="address" class="form-label">Address</label>
+                <input id="address" type="text" th:field="*{address}"
                        placeholder="Address" class="form-control mb-4 col-4">
 
-                <input type="text" th:field="*{phoneNumber}"
+                <label for="phoneNumber" class="form-label">Phone Number</label>
+                <input id="phoneNumber" type="text" th:field="*{phoneNumber}"
                        placeholder="Phone Number" class="form-control mb-4 col-4">
 
-                <input type="text" th:field="*{postalCode}"
+                <label for="postalCode" class="form-label">Postal Code</label>
+                <input id="postalCode" type="text" th:field="*{postalCode}"
                        placeholder="Postal Code" class="form-control mb-4 col-4">
 
                 <div class="d-flex justify-content-center">
@@ -45,18 +50,22 @@
             <form action="#" th:action="@{'/school/update/' + ${schoolId}}" th:object="${school}"
                   th:method="PUT" class="container col-7">
 
-                <input name="_method" type="hidden" value="PUT" />
+                <input name="_method" type="hidden" value="PUT"/>
 
-                <input type="text" th:field="*{name}"
+                <label for="nameForUpdate" class="form-label">Name</label>
+                <input id="nameForUpdate" type="text" th:field="*{name}"
                        placeholder="Name" class="form-control mb-4 col-4">
 
-                <input type="text" th:field="*{address}"
+                <label for="addressForUpdate" class="form-label">Address</label>
+                <input id="addressForUpdate" type="text" th:field="*{address}"
                        placeholder="Address" class="form-control mb-4 col-4">
 
-                <input type="text" th:field="*{phoneNumber}"
+                <label for="phoneNumberForUpdate" class="form-label">Phone Number</label>
+                <input id="phoneNumberForUpdate" type="text" th:field="*{phoneNumber}"
                        placeholder="Phone Number" class="form-control mb-4 col-4">
 
-                <input type="text" th:field="*{postalCode}"
+                <label for="postalCodeForUpdate" class="form-label">Postal Code</label>
+                <input id="postalCodeForUpdate" type="text" th:field="*{postalCode}"
                        placeholder="Postal Code" class="form-control mb-4 col-4">
 
                 <div class="d-flex justify-content-center">
