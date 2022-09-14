@@ -1,5 +1,6 @@
 package uz.exadel.exception;
 
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -35,6 +36,14 @@ public class GlobalExceptionHandler {
         ex.printStackTrace();
         ResponseData responseData = new ResponseData(null, "School not found", NOT_FOUND.value());
         return ResponseEntity.status(NOT_FOUND).body(responseData);
+    }
+
+    @ExceptionHandler(value = {DataIntegrityViolationException.class})
+    @ResponseStatus(BAD_REQUEST)
+    public HttpEntity<?> handleConstraintViolationException(DataIntegrityViolationException ex) {
+        ex.printStackTrace();
+        ResponseData responseData = new ResponseData(null, "This operation affects some other entities. Please delete all related entities to avoid this error.", BAD_REQUEST.value());
+        return ResponseEntity.status(BAD_REQUEST).body(responseData);
     }
 
     @ExceptionHandler(value = {Exception.class})
