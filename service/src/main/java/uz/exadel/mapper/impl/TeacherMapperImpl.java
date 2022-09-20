@@ -1,5 +1,6 @@
 package uz.exadel.mapper.impl;
 
+import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import uz.exadel.dtos.TeacherDTO;
 import uz.exadel.entity.Course;
@@ -13,6 +14,7 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+@Service
 public class TeacherMapperImpl implements TeacherMapper {
     private final CourseRepository courseRepository;
 
@@ -39,7 +41,7 @@ public class TeacherMapperImpl implements TeacherMapper {
 
         List<String> courseIdsString = teacherDTO.getCourses();
         Set<UUID> courseIds = courseIdsString.stream().map(UUID::fromString).collect(Collectors.toSet());
-        List<Course> courses = courseRepository.findByIdIn(courseIds);
+        Set<Course> courses = courseRepository.findByIdIn(courseIds);
         teacher.setCourses(courses);
 
         return teacher;
