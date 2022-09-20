@@ -1,6 +1,7 @@
 package uz.exadel.exception;
 
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -59,6 +60,14 @@ public class GlobalExceptionHandler {
     public HttpEntity<?> handleConstraintViolationException(DataIntegrityViolationException ex) {
         ex.printStackTrace();
         ResponseData responseData = new ResponseData(null, "This operation affects some other entities. Please delete all related entities to avoid this error.", BAD_REQUEST.value());
+        return ResponseEntity.status(BAD_REQUEST).body(responseData);
+    }
+
+    @ExceptionHandler(value = {EmptyResultDataAccessException.class})
+    @ResponseStatus(BAD_REQUEST)
+    public HttpEntity<?> handleEmptyResultDataAccessException(EmptyResultDataAccessException ex) {
+        ex.printStackTrace();
+        ResponseData responseData = new ResponseData(null, ex.getMessage(), BAD_REQUEST.value());
         return ResponseEntity.status(BAD_REQUEST).body(responseData);
     }
 
