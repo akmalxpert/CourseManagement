@@ -38,6 +38,22 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(NOT_FOUND).body(responseData);
     }
 
+    @ExceptionHandler(value = {GroupNotFoundException.class})
+    @ResponseStatus(NOT_FOUND)
+    public HttpEntity<?> handleGroupNotFoundException(GroupNotFoundException ex) {
+        ex.printStackTrace();
+        ResponseData responseData = new ResponseData(null, "Group not found", NOT_FOUND.value());
+        return ResponseEntity.status(NOT_FOUND).body(responseData);
+    }
+
+    @ExceptionHandler(value = {TeacherNotFoundException.class})
+    @ResponseStatus(NOT_FOUND)
+    public HttpEntity<?> handleTeacherNotFoundException(TeacherNotFoundException ex) {
+        ex.printStackTrace();
+        ResponseData responseData = new ResponseData(null, "Teacher not found", NOT_FOUND.value());
+        return ResponseEntity.status(NOT_FOUND).body(responseData);
+    }
+
     @ExceptionHandler(value = {DataIntegrityViolationException.class})
     @ResponseStatus(BAD_REQUEST)
     public HttpEntity<?> handleConstraintViolationException(DataIntegrityViolationException ex) {
