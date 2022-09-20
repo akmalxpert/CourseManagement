@@ -54,6 +54,10 @@ public class TeacherValidationServiceImpl implements TeacherValidationService {
             throw new MissingMandatoryFieldException("Courses");
         }
 
+        logger.info("Start: Validating course IDs from teacher DTO");
+        teacherDTO.getCourses().forEach(ValidatorUtils::validateId);
+        logger.info("Finish: Validating course IDs from teacher DTO");
+
         if (teacherDTO.getPositions() == null || teacherDTO.getPositions().isEmpty()) {
             throw new MissingMandatoryFieldException("Teacher Positions");
         }

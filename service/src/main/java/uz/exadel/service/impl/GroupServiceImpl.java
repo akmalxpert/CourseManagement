@@ -40,21 +40,14 @@ public class GroupServiceImpl implements GroupService {
 
     @Override
     public ResponseData get(String id) {
-        Group group = groupRepository.findById(UUID.fromString(id)).orElse(null);
-        if (group == null) {
-            throw new GroupNotFoundException();
-        }
-
+        Group group = groupRepository.findById(UUID.fromString(id)).orElseThrow(GroupNotFoundException::new);
         return new ResponseData(group);
     }
 
     @Override
     public ResponseData delete(String id) {
         UUID uuid = UUID.fromString(id);
-        Group group = groupRepository.findById(uuid).orElse(null);
-        if (group == null) {
-            throw new GroupNotFoundException();
-        }
+        groupRepository.findById(uuid).orElseThrow(GroupNotFoundException::new);
 
         groupRepository.deleteById(uuid);
         return new ResponseData(null, "Delete success");
@@ -63,10 +56,7 @@ public class GroupServiceImpl implements GroupService {
     @Override
     public ResponseData update(GroupDTO groupDTO, String id) {
         UUID uuid = UUID.fromString(id);
-        Group group = groupRepository.findById(uuid).orElse(null);
-        if (group == null) {
-            throw new GroupNotFoundException();
-        }
+        Group group = groupRepository.findById(uuid).orElseThrow(GroupNotFoundException::new);
 
         UUID schoolUUID = UUID.fromString(groupDTO.getSchoolId());
         if (!Objects.equals(group.getSchoolId(), schoolUUID)) {

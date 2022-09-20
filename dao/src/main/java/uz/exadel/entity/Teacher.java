@@ -6,7 +6,6 @@ import org.hibernate.annotations.GenericGenerator;
 import uz.exadel.enums.TeacherPositionEnum;
 
 import javax.persistence.*;
-import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
@@ -31,7 +30,7 @@ public class Teacher {
     private String officePhoneNumber;
 
     @ManyToMany
-    private List<Course> courses;
+    private Set<Course> courses;
 
     private UUID schoolId;
     @ManyToOne(cascade = {CascadeType.PERSIST}, fetch = FetchType.EAGER)
