@@ -50,17 +50,19 @@ public class TeacherValidationServiceImpl implements TeacherValidationService {
             throw new MissingMandatoryFieldException("Full Name");
         }
 
-        if (teacherDTO.getCourses().isEmpty()) {
+        if (teacherDTO.getCourses() == null || teacherDTO.getCourses().isEmpty()) {
             throw new MissingMandatoryFieldException("Courses");
         }
 
+        if (teacherDTO.getPositions() == null || teacherDTO.getPositions().isEmpty()) {
+            throw new MissingMandatoryFieldException("Teacher Positions");
+        }
+
         List<String> positions = teacherDTO.getPositions();
-        if (!positions.isEmpty()) {
-            try {
-                positions.stream().map(TeacherPositionEnum::valueOf).collect(Collectors.toList());
-            } catch (RuntimeException exception) {
-                throw new ValidationException("Position(s) are not valid for the system");
-            }
+        try {
+            positions.stream().map(TeacherPositionEnum::valueOf).collect(Collectors.toList());
+        } catch (RuntimeException exception) {
+            throw new ValidationException("Position(s) is not valid for the system");
         }
 
         ValidatorUtils.checkMaxLength(teacherDTO.getFullName(), 25, "Full Name");
