@@ -148,13 +148,12 @@ public class SchoolValidationServiceImplTest {
     }
 
     private SchoolDTO createSchoolDTO() {
-        SchoolDTO schoolDTO = new SchoolDTO();
-        schoolDTO.setName(TEST_SCHOOL_NAME);
-        schoolDTO.setAddress(TEST_SCHOOL_ADDRESS);
-        schoolDTO.setPhoneNumber(TEST_SCHOOL_PHONE_NUMBER);
-        schoolDTO.setPostalCode(TEST_SCHOOL_POSTAL_CODE);
-
-        return schoolDTO;
+        return new SchoolDTO(
+                TEST_SCHOOL_NAME,
+                TEST_SCHOOL_ADDRESS,
+                TEST_SCHOOL_PHONE_NUMBER,
+                TEST_SCHOOL_POSTAL_CODE
+        );
     }
 
     private static Stream<String> blankOrNullStrings() {
