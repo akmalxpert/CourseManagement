@@ -1,16 +1,12 @@
 package uz.exadel.service.impl;
 
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
 import uz.exadel.dtos.ResponseData;
 import uz.exadel.dtos.TeacherDTO;
-import uz.exadel.entity.Course;
 import uz.exadel.entity.Teacher;
-import uz.exadel.enums.TeacherPositionEnum;
 import uz.exadel.exception.SchoolNotFoundException;
 import uz.exadel.exception.TeacherNotFoundException;
 import uz.exadel.mapper.TeacherMapper;
-import uz.exadel.repository.CourseRepository;
 import uz.exadel.repository.SchoolRepository;
 import uz.exadel.repository.TeacherRepository;
 import uz.exadel.service.TeacherService;
@@ -18,22 +14,18 @@ import uz.exadel.service.TeacherService;
 import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Objects;
-import java.util.Set;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Service
 @Transactional
 public class TeacherServiceImpl implements TeacherService {
     private final TeacherRepository teacherRepository;
     private final SchoolRepository schoolRepository;
-    private final CourseRepository courseRepository;
     private final TeacherMapper teacherMapper;
 
-    public TeacherServiceImpl(TeacherRepository teacherRepository, SchoolRepository schoolRepository, CourseRepository courseRepository, TeacherMapper teacherMapper) {
+    public TeacherServiceImpl(TeacherRepository teacherRepository, SchoolRepository schoolRepository, TeacherMapper teacherMapper) {
         this.teacherRepository = teacherRepository;
         this.schoolRepository = schoolRepository;
-        this.courseRepository = courseRepository;
         this.teacherMapper = teacherMapper;
     }
 
@@ -70,24 +62,8 @@ public class TeacherServiceImpl implements TeacherService {
                     .orElseThrow(SchoolNotFoundException::new);
         }
 
-        List<String> positions = teacherDTO.getPositions();
-        Set<TeacherPositionEnum> positionEnumSet = positions.stream().map(TeacherPositionEnum::valueOf).collect(Collectors.toSet());
-        teacher.setPositions(positionEnumSet);
-
-        teacher.setFullName(teacherDTO.getFullName());
-        teacher.setSchoolId(schoolUUID);
-
-        if (StringUtils.hasText(teacherDTO.getEmail())) {
-            teacher.setEmail(teacherDTO.getEmail());
-        }
-        if (StringUtils.hasText(teacherDTO.getOfficePhoneNumber())) {
-            teacher.setOfficePhoneNumber(teacher.getOfficePhoneNumber());
-        }
-
-        List<String> courseIdsString = teacherDTO.getCourses();
-        Set<UUID> courseIds = courseIdsString.stream().map(UUID::fromString).collect(Collectors.toSet());
-        Set<Course> courses = courseRepository.findByIdIn(courseIds);
-        teacher.setCourses(courses);
+        teacher = teacherMapper.teacherFromTeacherDTO(teacherDTO);
+        teacher.setId(uuid);
 
         teacherRepository.save(teacher);
 

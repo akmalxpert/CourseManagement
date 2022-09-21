@@ -129,7 +129,9 @@ class SchoolServiceImplTest {
     @DisplayName("Success while updating school")
     void updateSuccess() {
         SchoolDTO schoolDTO = createSchoolDTO();
-        School school = createSchool();
+        School school = SchoolMapper.INSTANCE.schoolToSchoolDTO(schoolDTO);
+        school.setId(TEST_SCHOOL_UUID);
+
         when(schoolRepository.findById(TEST_SCHOOL_UUID)).thenReturn(Optional.of(school));
 
         ResponseData actualResult = schoolService.update(schoolDTO, TEST_SCHOOL_ID);

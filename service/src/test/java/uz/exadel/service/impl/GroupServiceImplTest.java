@@ -128,7 +128,9 @@ public class GroupServiceImplTest {
     @DisplayName("Success while updating group")
     void updateSuccess() {
         GroupDTO groupDTO = createGroupDTO();
-        Group group = createGroup();
+        Group group = GroupMapper.INSTANCE.groupToGroupDTO(groupDTO);
+        group.setId(TEST_GROUP_UUID);
+
         when(groupRepository.findById(TEST_GROUP_UUID)).thenReturn(Optional.of(group));
 
         ResponseData actualResult = groupService.update(groupDTO, TEST_GROUP_ID);

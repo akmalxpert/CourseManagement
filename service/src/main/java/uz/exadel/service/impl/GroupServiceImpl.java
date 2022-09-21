@@ -64,10 +64,9 @@ public class GroupServiceImpl implements GroupService {
                     .orElseThrow(SchoolNotFoundException::new);
         }
 
-        group.setName(groupDTO.getName());
-        group.setLevel(groupDTO.getLevel());
-        group.setFaculty(FacultyEnum.valueOf(groupDTO.getFaculty()));
-        group.setSchoolId(schoolUUID);
+        group = GroupMapper.INSTANCE.groupToGroupDTO(groupDTO);
+        group.setId(uuid);
+
         groupRepository.save(group);
 
         return new ResponseData(null, "Update success");
