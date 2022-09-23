@@ -35,6 +35,7 @@
                 <a th:href="@{/school/update/{id}(id=${school.id})}" class="btn btn-warning">Update</a>
                 <a th:href="@{/school/delete/{id}(id=${school.id})}" class="btn btn-danger">Delete</a>
                 <a th:href="@{'/group?schoolId='+${school.id}}" class="btn btn-info">Show Groups</a>
+                <a th:href="@{'/teacher?schoolId='+${school.id}}" class="btn btn-outline-dark">Show Teachers</a>
             </td>
         </tr>
         </tbody>

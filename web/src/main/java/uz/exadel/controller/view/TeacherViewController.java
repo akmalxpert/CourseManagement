@@ -9,8 +9,12 @@ import uz.exadel.controller.api.SchoolController;
 import uz.exadel.controller.api.TeacherController;
 import uz.exadel.dtos.ResponseData;
 import uz.exadel.dtos.TeacherDTO;
+import uz.exadel.enums.TeacherPositionEnum;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/teacher")
@@ -41,6 +45,9 @@ public class TeacherViewController {
         ResponseEntity<ResponseData> coursesResponse = courseController.getCoursesBySchoolId(schoolId);
         Object courseList = Objects.requireNonNull(coursesResponse.getBody()).getData();
         model.addAttribute("courseList", courseList);
+
+        List<String> positions = Arrays.stream(TeacherPositionEnum.values()).map(String::valueOf).collect(Collectors.toList());
+        model.addAttribute("positionsList", positions);
 
         return "teacher";
     }
