@@ -47,6 +47,9 @@ public class TeacherServiceImpl implements TeacherService {
 
     @Override
     public ResponseData delete(String id) {
+        UUID uuid = UUID.fromString(id);
+        teacherRepository.findById(uuid).orElseThrow(TeacherNotFoundException::new);
+
         teacherRepository.deleteById(UUID.fromString(id));
         return new ResponseData(null, "Delete success");
     }

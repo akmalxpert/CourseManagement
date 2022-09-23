@@ -1,6 +1,7 @@
 package uz.exadel.entity;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.GenericGenerator;
 import uz.exadel.enums.TeacherPositionEnum;
@@ -13,6 +14,7 @@ import java.util.UUID;
 @Entity
 @Getter
 @Setter
+@NoArgsConstructor
 public class Teacher {
     @Id
     @GeneratedValue(generator = "uuid2")
@@ -48,5 +50,15 @@ public class Teacher {
     @Override
     public int hashCode() {
         return Objects.hash(id, fullName);
+    }
+
+    public Teacher(UUID id, String fullName, Set<TeacherPositionEnum> positions, String email, String officePhoneNumber, Set<Course> courses, UUID schoolId) {
+        this.id = id;
+        this.fullName = fullName;
+        this.positions = positions;
+        this.email = email;
+        this.officePhoneNumber = officePhoneNumber;
+        this.courses = courses;
+        this.schoolId = schoolId;
     }
 }
