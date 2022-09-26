@@ -29,7 +29,7 @@ public class TeacherMapperImpl implements TeacherMapper {
             teacher.setEmail(teacherDTO.getEmail());
         }
         if (StringUtils.hasText(teacherDTO.getOfficePhoneNumber())) {
-            teacher.setOfficePhoneNumber(teacher.getOfficePhoneNumber());
+            teacher.setOfficePhoneNumber(teacherDTO.getOfficePhoneNumber());
         }
         List<String> positions = teacherDTO.getPositions();
         if (!positions.isEmpty()) {
