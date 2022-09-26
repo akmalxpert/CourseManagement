@@ -55,6 +55,14 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(NOT_FOUND).body(responseData);
     }
 
+    @ExceptionHandler(value = {StudentNotFoundException.class})
+    @ResponseStatus(NOT_FOUND)
+    public HttpEntity<?> handleStudentNotFoundException(StudentNotFoundException ex) {
+        ex.printStackTrace();
+        ResponseData responseData = new ResponseData(null, "Student not found", NOT_FOUND.value());
+        return ResponseEntity.status(NOT_FOUND).body(responseData);
+    }
+
     @ExceptionHandler(value = {DataIntegrityViolationException.class})
     @ResponseStatus(BAD_REQUEST)
     public HttpEntity<?> handleConstraintViolationException(DataIntegrityViolationException ex) {
