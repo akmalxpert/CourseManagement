@@ -7,9 +7,9 @@ import uz.exadel.exception.ValidationException;
 import java.util.UUID;
 
 public class ValidatorUtils {
-    public static void checkMaxLength(String value, int maxLength, String attributeName) {
+    public static void checkNullableAndMaxLength(String value, int maxLength, String attributeName) {
         if (!StringUtils.hasText(value)) {
-            throw new MissingMandatoryFieldException(uz.exadel.utils.StringUtils.capitalize(attributeName) + " is missing or empty");
+            throw new MissingMandatoryFieldException(uz.exadel.utils.StringUtils.capitalize(attributeName));
         }
         if (value.length() > maxLength) {
             throw new ValidationException(uz.exadel.utils.StringUtils.capitalize(attributeName) + " should not be greater than " + maxLength + " characters");

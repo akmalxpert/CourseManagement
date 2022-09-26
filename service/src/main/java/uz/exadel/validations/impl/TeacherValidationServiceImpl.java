@@ -3,7 +3,6 @@ package uz.exadel.validations.impl;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
 import uz.exadel.dtos.TeacherDTO;
 import uz.exadel.enums.TeacherPositionEnum;
 import uz.exadel.exception.MissingMandatoryFieldException;
@@ -46,9 +45,7 @@ public class TeacherValidationServiceImpl implements TeacherValidationService {
     }
 
     private void commonValidate(TeacherDTO teacherDTO) {
-        if (!StringUtils.hasText(teacherDTO.getFullName())) {
-            throw new MissingMandatoryFieldException("Full Name");
-        }
+        ValidatorUtils.checkNullableAndMaxLength(teacherDTO.getFullName(), 25, "Full Name");
 
         if (teacherDTO.getCourses() == null || teacherDTO.getCourses().isEmpty()) {
             throw new MissingMandatoryFieldException("Courses");
@@ -68,8 +65,6 @@ public class TeacherValidationServiceImpl implements TeacherValidationService {
         } catch (RuntimeException exception) {
             throw new ValidationException("Position(s) is not valid for the system");
         }
-
-        ValidatorUtils.checkMaxLength(teacherDTO.getFullName(), 25, "Full Name");
 
         logger.info("Validating schoolId from teacherDTO");
         ValidatorUtils.validateId(teacherDTO.getSchoolId());
