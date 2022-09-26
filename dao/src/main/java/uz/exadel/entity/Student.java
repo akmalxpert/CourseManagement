@@ -1,17 +1,19 @@
 package uz.exadel.entity;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
-import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 import java.util.UUID;
 
 @Entity
 @Getter
 @Setter
+@NoArgsConstructor
 public class Student {
     @Id
     @GeneratedValue(generator = "uuid2")
@@ -27,7 +29,7 @@ public class Student {
     private Group group;
 
     @ManyToMany(fetch = FetchType.LAZY)
-    private List<Course> courses;
+    private Set<Course> courses;
 
     @Column(nullable = false)
     private Integer level;
@@ -43,5 +45,13 @@ public class Student {
     @Override
     public int hashCode() {
         return Objects.hash(id, fullName, groupId, level);
+    }
+
+    public Student(UUID id, String fullName, UUID groupId, Set<Course> courses, Integer level) {
+        this.id = id;
+        this.fullName = fullName;
+        this.groupId = groupId;
+        this.courses = courses;
+        this.level = level;
     }
 }
