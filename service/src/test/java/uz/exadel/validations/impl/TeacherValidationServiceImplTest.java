@@ -20,7 +20,7 @@ import java.util.stream.Stream;
 import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(MockitoExtension.class)
-public class TeacherValidationServiceImplTest {
+class TeacherValidationServiceImplTest {
     private static final String TEST_TEACHER_NAME = "test-teacher-name";
     private static final List<String> TEST_TEACHER_POSITIONS = Collections.singletonList("LECTURER");
     private static final String TEST_TEACHER_EMAIL = "test@email.com";

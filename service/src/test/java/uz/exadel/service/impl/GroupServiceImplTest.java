@@ -28,7 +28,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-public class GroupServiceImplTest {
+class GroupServiceImplTest {
     private static final String TEST_GROUP_ID = "e94d0a42-411a-408a-a4d0-1de0009299ae";
     private static final String TEST_GROUP_NAME = "test-group-name";
     private static final Integer TEST_GROUP_LEVEL = 4;

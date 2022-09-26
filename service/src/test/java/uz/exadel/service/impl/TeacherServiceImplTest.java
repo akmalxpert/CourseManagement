@@ -29,7 +29,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-public class TeacherServiceImplTest {
+class TeacherServiceImplTest {
     private static final String TEST_TEACHER_NAME = "test-teacher-name";
     private static final List<String> TEST_TEACHER_POSITIONS = Collections.singletonList("LECTURER");
     private static final String TEST_TEACHER_EMAIL = "test@email.com";

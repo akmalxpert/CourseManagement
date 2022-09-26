@@ -17,7 +17,7 @@ import java.util.stream.Stream;
 import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(MockitoExtension.class)
-public class GroupValidationServiceImplTest {
+class GroupValidationServiceImplTest {
     private static final String TEST_GROUP_ID = "e94d0a42-411a-408a-a4d0-1de0009299ae";
     private static final String TEST_GROUP_NAME = "test-group-name";
     private static final Integer TEST_GROUP_LEVEL = 4;

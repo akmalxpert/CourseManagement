@@ -17,7 +17,7 @@ import java.util.stream.Stream;
 import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(MockitoExtension.class)
-public class SchoolValidationServiceImplTest {
+class SchoolValidationServiceImplTest {
     private static final String TEST_SCHOOL_NAME = "test-school-name";
     private static final String TEST_SCHOOL_ADDRESS = "test-school-address";
     private static final String TEST_SCHOOL_PHONE_NUMBER = "123456789";
