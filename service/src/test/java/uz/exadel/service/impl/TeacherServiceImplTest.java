@@ -136,7 +136,7 @@ class TeacherServiceImplTest {
         Teacher teacher = createTeacher();
 
         when(teacherRepository.findById(TEST_TEACHER_UUID)).thenReturn(Optional.of(teacher));
-        when(teacherMapper.teacherFromTeacherDTO(teacherDTO)).thenReturn(teacher);
+        when(teacherMapper.teacherFromTeacherDTOUpdate(teacherDTO, teacher)).thenReturn(teacher);
 
         ResponseData actualResult = teacherService.update(teacherDTO, TEST_TEACHER_ID);
 

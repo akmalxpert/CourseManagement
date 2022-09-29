@@ -42,7 +42,7 @@ public class TeacherViewController {
         Object schoolList = Objects.requireNonNull(schoolsResponse.getBody()).getData();
         model.addAttribute("schoolList", schoolList);
 
-        ResponseEntity<ResponseData> coursesResponse = courseController.getCoursesBySchoolId(schoolId);
+        ResponseEntity<ResponseData> coursesResponse = courseController.getCoursesBySchoolIdOrGroupId(schoolId, null);
         Object courseList = Objects.requireNonNull(coursesResponse.getBody()).getData();
         model.addAttribute("courseList", courseList);
 

@@ -25,6 +25,15 @@ public class TeacherMapperImpl implements TeacherMapper {
     @Override
     public Teacher teacherFromTeacherDTO(TeacherDTO teacherDTO) {
         Teacher teacher = new Teacher();
+        return convert(teacherDTO, teacher);
+    }
+
+    @Override
+    public Teacher teacherFromTeacherDTOUpdate(TeacherDTO teacherDTO, Teacher teacher) {
+        return convert(teacherDTO, teacher);
+    }
+
+    private Teacher convert(TeacherDTO teacherDTO, Teacher teacher) {
         if (StringUtils.hasText(teacherDTO.getEmail())) {
             teacher.setEmail(teacherDTO.getEmail());
         }

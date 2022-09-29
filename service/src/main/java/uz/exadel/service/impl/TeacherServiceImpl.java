@@ -65,8 +65,7 @@ public class TeacherServiceImpl implements TeacherService {
                     .orElseThrow(SchoolNotFoundException::new);
         }
 
-        teacher = teacherMapper.teacherFromTeacherDTO(teacherDTO);
-        teacher.setId(uuid);
+        teacher = teacherMapper.teacherFromTeacherDTOUpdate(teacherDTO, teacher);
 
         teacherRepository.save(teacher);
 
