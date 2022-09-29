@@ -66,8 +66,7 @@ public class StudentServiceImpl implements StudentService {
                     .orElseThrow(GroupNotFoundException::new);
         }
 
-        student = studentMapper.studentFromStudentDTO(studentDTO);
-        student.setId(uuid);
+        student = studentMapper.studentFromStudentDTOUpdate(studentDTO, student);
 
         studentRepository.save(student);
 

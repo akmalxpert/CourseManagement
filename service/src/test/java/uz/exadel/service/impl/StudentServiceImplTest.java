@@ -132,7 +132,7 @@ class StudentServiceImplTest {
         Student student = createStudent();
 
         when(studentRepository.findById(TEST_STUDENT_UUID)).thenReturn(Optional.of(student));
-        when(studentMapper.studentFromStudentDTO(studentDTO)).thenReturn(student);
+        when(studentMapper.studentFromStudentDTOUpdate(studentDTO, student)).thenReturn(student);
 
         ResponseData actualResult = studentService.update(TEST_STUDENT_ID, studentDTO);
 

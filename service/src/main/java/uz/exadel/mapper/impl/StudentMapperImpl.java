@@ -23,6 +23,15 @@ public class StudentMapperImpl implements StudentMapper {
     @Override
     public Student studentFromStudentDTO(StudentDTO studentDTO) {
         Student student = new Student();
+        return convert(studentDTO, student);
+    }
+
+    @Override
+    public Student studentFromStudentDTOUpdate(StudentDTO studentDTO, Student student) {
+        return convert(studentDTO, student);
+    }
+
+    private Student convert(StudentDTO studentDTO, Student student) {
         student.setFullName(studentDTO.getFullName());
         student.setLevel(studentDTO.getLevel());
         student.setGroupId(UUID.fromString(studentDTO.getGroupId()));
