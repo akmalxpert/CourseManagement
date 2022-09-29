@@ -30,6 +30,12 @@ public class GroupValidationServiceImpl implements GroupValidationService {
     }
 
     @Override
+    public void validateGetGroupsByGroupIdInTheSameSchool(String groupId) {
+        logger.info("Validating the groupId to get the list of groups in the same school");
+        ValidatorUtils.validateId(groupId);
+    }
+
+    @Override
     public void validateUpdateGroup(String id, GroupDTO groupDTO) {
         ValidatorUtils.validateId(id);
         commonValidate(groupDTO);

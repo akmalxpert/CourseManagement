@@ -7,6 +7,8 @@ public interface GroupValidationService {
 
     void validateGetGroupBySchoolIdAndFaculty(String schoolId, String faculty);
 
+    void validateGetGroupsByGroupIdInTheSameSchool(String groupId);
+
     void validateUpdateGroup(String id, GroupDTO groupDTO);
 
     void validateDeleteGroup(String id);
