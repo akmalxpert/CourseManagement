@@ -16,7 +16,9 @@ public class CourseController {
     }
 
     @GetMapping
-    public ResponseEntity<ResponseData> getCoursesBySchoolId(@RequestParam String schoolId) {
-        return ResponseEntity.ok(courseService.getBySchoolId(schoolId));
+    public ResponseEntity<ResponseData> getCoursesBySchoolIdOrGroupId(
+            @RequestParam(required = false) String schoolId,
+            @RequestParam(required = false) String groupId) {
+        return ResponseEntity.ok(courseService.getBySchoolIdOrGroupId(schoolId, groupId));
     }
 }

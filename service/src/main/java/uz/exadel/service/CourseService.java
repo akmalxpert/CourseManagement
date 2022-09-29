@@ -5,5 +5,5 @@ import uz.exadel.dtos.ResponseData;
 
 @Service
 public interface CourseService {
-    ResponseData getBySchoolId(String schoolId);
+    ResponseData getBySchoolIdOrGroupId(String schoolId, String groupId);
 }
