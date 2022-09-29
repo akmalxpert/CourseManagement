@@ -6,29 +6,33 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
 
-    <title>Group</title>
+    <title>Student</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+
 </head>
 <body>
 <nav th:insert="fragments/navbar :: navbar">
 
 </nav>
 <section class="container col-8">
-    <h2 class="text-center">Groups List</h2>
+    <h2 class="text-center">Student List</h2>
     <table class="table table-striped table-responsive-md">
         <thead>
         <tr>
-            <th>Name</th>
+            <th>Full Name</th>
             <th>Level</th>
-            <th>Faculty</th>
+            <th>Courses</th>
         </tr>
         </thead>
         <tbody>
-        <tr th:each="group: ${groupList}">
-            <td th:text="${group.name}"></td>
-            <td th:text="${group.level}"></td>
-            <td th:text="${group.faculty}"></td>
+        <tr th:each="student: ${studentList}">
+            <td th:text="${student.fullName}"></td>
+            <td th:text="${student.level}"></td>
+            <td th:each="course: ${student.courses}">
+                <p th:text="${course.name}"></p>
+            </td>
+
             <td>
                 <a class="btn btn-warning" data-bs-toggle="modal"
                    data-bs-target="#updateModal">Update</a>
@@ -37,40 +41,44 @@
                     <div class="modal-dialog" role="document">
                         <div class="modal-content">
                             <div class="modal-header">
-                                <h5 class="modal-title" id="updateModalLabel">Update Group</h5>
+                                <h5 class="modal-title" id="updateModalLabel">Update Student</h5>
                                 <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
                                     <span aria-hidden="true">&times;</span>
                                 </button>
                             </div>
                             <div class="modal-body">
-                                <form action="#" th:action="@{'/group/update/' + ${group.id}}" th:object="${groupDTO}"
+                                <form action="#" th:action="@{'/student/update/' + ${student.id}}"
+                                      th:object="${studentDTO}"
                                       th:method="PUT" class="container col-7">
 
                                     <input name="_method" type="hidden" value="PUT"/>
 
-                                    <label class="form-label" for="name">Name</label>
-                                    <input id="name" type="text" th:field="*{name}"
+                                    <label class="form-label" for="fullName">Fullname</label>
+                                    <input id="fullName" type="text" th:field="*{fullName}"
                                            class="form-control mb-4">
 
                                     <label class="form-label" for="level">Level</label>
                                     <input id="level" type="number" th:field="*{level}"
                                            class="form-control mb-4">
 
-                                    <label class="form-label" for="faculty">Faculty</label>
-                                    <select th:field="*{faculty}" id="faculty" class="form-select form-control mb-4">
-                                        <option th:value="BUSINESS_INFORMATION_SYSTEMS">BIS</option>
-                                        <option th:value="FINANCE">Finance</option>
-                                        <option th:value="ECONOMICS_WITH_FINANCE">Economics with Finance</option>
-                                        <option th:value="BUSINESS_MANAGEMENT">Business Management</option>
-                                        <option th:value="COMMERCIAL_LAW">Commercial Law</option>
+                                    <label class="form-label" for="courseList">Select Courses</label>
+                                    <select id="courseList" th:field="*{courses}" multiple="multiple"
+                                            class="form-control mb-4">
+                                        <option th:each="course : ${courseList}"
+                                                th:value="${course.id}"
+                                                th:text="${course.name}">
+                                            <!--                                                th:field="*{courses}"-->
                                     </select>
 
-                                    <label class="form-label" for="school">Select School</label>
-                                    <select id="school" th:field="*{schoolId}" class="form-select form-control mb-4">
-                                        <option th:each="school : ${schoolList}"
-                                                th:value="${school.id}"
-                                                th:text="${school.name}"/>
+                                    <label class="form-label" for="group">Select Group</label>
+                                    <select id="group" th:field="*{groupId}" class="form-select form-control mb-4">
+                                        <option th:each="group : ${groupList}"
+                                                th:value="${group.id}"
+                                                th:text="${group.name}"/>
                                     </select>
+
+                                    <p class="text-sm-center text-danger">*Please use CTRL + MOUSE if you want to choose
+                                        multiple options</p>
 
                                     <div class="d-flex justify-content-center">
                                         <button type="submit" class="btn btn-success col-3 mx-3"> Save</button>
@@ -80,58 +88,60 @@
                         </div>
                     </div>
                 </div>
+            </td>
 
-            </td>
             <td>
-                <a th:href="@{/group/delete/{id}(id=${group.id})}" class="btn btn-danger">Delete</a>
-            </td>
-            <td>
-                <a th:href="@{'/student?groupId='+${group.id}}" class="btn btn-info">Show
-                    Students</a>
+                <a th:href="@{/student/delete/{id}(id=${student.id})}" class="btn btn-danger">Delete</a>
             </td>
         </tr>
+
         </tbody>
     </table>
 
-
-    <a class="btn btn-info mb-3" data-bs-toggle="modal" data-bs-target="#addModal"> Add New Group </a>
-
+    <a class="btn btn-info mb-3" data-bs-toggle="modal"
+       data-bs-target="#addModal">Add New Student</a>
     <div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-labelledby="addModalLabel"
          aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="addModalLabel">Add New Group</h5>
+                    <h5 class="modal-title" id="addModalLabel">Add New Student</h5>
                     <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
                 <div class="modal-body">
-                    <form action="#" th:action="@{/group/save}" th:object="${groupDTO}"
+                    <form action="#" th:action="@{/student/save/}"
+                          th:object="${studentDTO}"
                           method="POST" class="container col-7">
-                        <label class="form-label" for="nameForSave">Name</label>
-                        <input id="nameForSave" type="text" th:field="*{name}"
+
+                        <label class="form-label" for="fullNameForSave">Fullname</label>
+                        <input id="fullNameForSave" type="text" th:field="*{fullName}"
                                class="form-control mb-4">
 
                         <label class="form-label" for="levelForSave">Level</label>
                         <input id="levelForSave" type="number" th:field="*{level}"
                                class="form-control mb-4">
 
-                        <label class="form-label" for="facultyForSave">Faculty</label>
-                        <select th:field="*{faculty}" id="facultyForSave" class="form-select form-control mb-4">
-                            <option th:value="BUSINESS_INFORMATION_SYSTEMS">BIS</option>
-                            <option th:value="FINANCE">Finance</option>
-                            <option th:value="ECONOMICS_WITH_FINANCE">Economics with Finance</option>
-                            <option th:value="BUSINESS_MANAGEMENT">Business Management</option>
-                            <option th:value="COMMERCIAL_LAW">Commercial Law</option>
+                        <label class="form-label" for="courseListForSave">Select Courses</label>
+                        <select id="courseListForSave" th:field="*{courses}" multiple="multiple"
+                                class="form-control mb-4">
+                            <option th:each="course : ${courseList}"
+                                    th:value="${course.id}"
+                                    th:text="${course.name}">
+                                <!--                                                th:field="*{courses}"-->
                         </select>
 
-                        <label class="form-label" for="schoolForSave">Select School</label>
-                        <select id="schoolForSave" th:field="*{schoolId}" class="form-select form-control mb-4">
-                            <option th:each="school : ${schoolList}"
-                                    th:value="${school.id}"
-                                    th:text="${school.name}"/>
+                        <label class="form-label" for="groupForSave">Select Group</label>
+                        <select id="groupForSave" th:field="*{groupId}" class="form-select form-control mb-4">
+                            <option th:each="group : ${groupList}"
+                                    th:value="${group.id}"
+                                    th:text="${group.name}"/>
                         </select>
+
+                        <p class="text-sm-center text-danger">*Please use CTRL + MOUSE if you want to choose
+                            multiple
+                            options</p>
 
                         <div class="d-flex justify-content-center">
                             <button type="submit" class="btn btn-success col-3 mx-3"> Save</button>
@@ -141,6 +151,7 @@
             </div>
         </div>
     </div>
+
 </section>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
