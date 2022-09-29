@@ -39,6 +39,12 @@ public class GroupController {
         return ResponseEntity.ok(groupService.getBySchoolIdAndFaculty(schoolId, faculty));
     }
 
+    @GetMapping("/{withGroupId}")
+    public ResponseEntity<ResponseData> getGroupsByGroupIdInTheSameSchool(@PathVariable String withGroupId) {
+        groupValidationService.validateGetGroupsByGroupIdInTheSameSchool(withGroupId);
+        return ResponseEntity.ok(groupService.getByGroupIdInTheSameSchool(withGroupId));
+    }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<ResponseData> deleteGroup(@PathVariable String id) {
         groupValidationService.validateDeleteGroup(id);
