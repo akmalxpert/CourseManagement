@@ -87,4 +87,15 @@ public class GroupServiceImpl implements GroupService {
 
         return new ResponseData(groups);
     }
+
+    @Override
+    public ResponseData getByGroupIdInTheSameSchool(String withGroupId) {
+        UUID uuid = UUID.fromString(withGroupId);
+        Group group = groupRepository.findById(uuid).orElseThrow(GroupNotFoundException::new);
+
+        UUID schoolId = group.getSchoolId();
+        List<Group> groupList = groupRepository.findBySchoolId(schoolId);
+
+        return new ResponseData(groupList);
+    }
 }

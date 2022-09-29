@@ -15,4 +15,6 @@ public interface GroupService {
     ResponseData update(GroupDTO groupDTO, String id);
 
     ResponseData getBySchoolIdAndFaculty(String schoolId, String faculty);
+
+    ResponseData getByGroupIdInTheSameSchool(String withGroupId);
 }
