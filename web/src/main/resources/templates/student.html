@@ -23,14 +23,17 @@
             <th>Full Name</th>
             <th>Level</th>
             <th>Courses</th>
+            <th>Actions</th>
         </tr>
         </thead>
         <tbody>
         <tr th:each="student: ${studentList}">
             <td th:text="${student.fullName}"></td>
             <td th:text="${student.level}"></td>
-            <td th:each="course: ${student.courses}">
-                <p th:text="${course.name}"></p>
+            <td>
+                <p th:each="course: ${student.courses}">
+                    <span th:text="${course.name}"></span>
+                </p>
             </td>
 
             <td>
@@ -88,9 +91,7 @@
                         </div>
                     </div>
                 </div>
-            </td>
 
-            <td>
                 <a th:href="@{/student/delete/{id}(id=${student.id})}" class="btn btn-danger">Delete</a>
             </td>
         </tr>

@@ -25,16 +25,23 @@
             <th>Email</th>
             <th>Office Phone Number</th>
             <th>Courses</th>
+            <th>Actions</th>
         </tr>
         </thead>
         <tbody>
         <tr th:each="teacher: ${teacherList}">
             <td th:text="${teacher.fullName}"></td>
-            <td th:text="${teacher.positions}"></td>
+            <td>
+                <p th:each="position: ${teacher.positions}">
+                    <span th:text="${position}"></span>
+                </p>
+            </td>
             <td th:text="${teacher.email}"></td>
             <td th:text="${teacher.officePhoneNumber}"></td>
-            <td th:each="course: ${teacher.courses}">
-                <p th:text="${course.name}"></p>
+            <td>
+                <p th:each="course: ${teacher.courses}">
+                    <span th:text="${course.name}"></span>
+                </p>
             </td>
 
             <td>
@@ -105,9 +112,7 @@
                         </div>
                     </div>
                 </div>
-            </td>
 
-            <td>
                 <a th:href="@{/teacher/delete/{id}(id=${teacher.id})}" class="btn btn-danger">Delete</a>
             </td>
         </tr>
