@@ -47,6 +47,14 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(NOT_FOUND).body(responseData);
     }
 
+    @ExceptionHandler(value = {CourseNotFoundException.class})
+    @ResponseStatus(NOT_FOUND)
+    public HttpEntity<?> handleCourseNotFoundException(CourseNotFoundException ex) {
+        ex.printStackTrace();
+        ResponseData responseData = new ResponseData(null, "Course not found", NOT_FOUND.value());
+        return ResponseEntity.status(NOT_FOUND).body(responseData);
+    }
+
     @ExceptionHandler(value = {TeacherNotFoundException.class})
     @ResponseStatus(NOT_FOUND)
     public HttpEntity<?> handleTeacherNotFoundException(TeacherNotFoundException ex) {
