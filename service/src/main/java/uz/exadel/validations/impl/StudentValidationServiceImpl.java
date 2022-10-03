@@ -11,7 +11,7 @@ import uz.exadel.validations.StudentValidationService;
 
 @Service
 public class StudentValidationServiceImpl implements StudentValidationService {
-    private static final Logger logger = LogManager.getLogger(SchoolValidationServiceImpl.class);
+    private static final Logger logger = LogManager.getLogger(StudentValidationServiceImpl.class);
 
     @Override
     public void validateCreate(StudentDTO studentDTO) {

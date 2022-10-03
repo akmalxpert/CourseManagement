@@ -13,7 +13,7 @@ import uz.exadel.validations.GroupValidationService;
 
 @Service
 public class GroupValidationServiceImpl implements GroupValidationService {
-    private static final Logger logger = LogManager.getLogger(SchoolValidationServiceImpl.class);
+    private static final Logger logger = LogManager.getLogger(GroupValidationServiceImpl.class);
 
     @Override
     public void validateCreateGroup(GroupDTO groupDTO) {

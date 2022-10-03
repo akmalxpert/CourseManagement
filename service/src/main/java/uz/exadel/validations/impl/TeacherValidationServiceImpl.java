@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 
 @Service
 public class TeacherValidationServiceImpl implements TeacherValidationService {
-    private static final Logger logger = LogManager.getLogger(SchoolValidationServiceImpl.class);
+    private static final Logger logger = LogManager.getLogger(TeacherValidationServiceImpl.class);
 
     @Override
     public void validateCreate(TeacherDTO teacherDTO) {
