@@ -86,8 +86,10 @@
                 <a th:href="@{/group/delete/{id}(id=${group.id})}" class="btn btn-danger">Delete</a>
             </td>
             <td>
-                <a th:href="@{'/student?groupId='+${group.id}}" class="btn btn-info">Show
-                    Students</a>
+                <a th:href="@{'/student?groupId='+${group.id}}" class="btn btn-info">Show Students</a>
+            </td>
+            <td>
+                <a th:href="@{'/course?groupId='+${group.id}}" class="btn btn-outline-warning">Show Courses</a>
             </td>
         </tr>
         </tbody>
