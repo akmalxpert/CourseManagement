@@ -17,6 +17,7 @@ import uz.exadel.service.CourseService;
 
 import javax.transaction.Transactional;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 @Service
@@ -80,6 +81,12 @@ public class CourseServiceImpl implements CourseService {
     public ResponseData update(String id, CourseDTO courseDTO) {
         UUID uuid = UUID.fromString(id);
         Course course = courseRepository.findById(uuid).orElseThrow(CourseNotFoundException::new);
+
+        UUID schoolUUID = UUID.fromString(courseDTO.getSchoolId());
+        if (!Objects.equals(course.getSchoolId(), schoolUUID)) {
+            schoolRepository.findById(schoolUUID)
+                    .orElseThrow(SchoolNotFoundException::new);
+        }
 
         course = CourseMapper.INSTANCE.courseToCourseDTO(courseDTO);
         course.setId(uuid);
