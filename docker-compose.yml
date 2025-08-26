@@ -4,12 +4,17 @@ services:
     build: .
     image: course-app:latest
     ports:
-      - 8081:8080
+      - ${DOCKER_APP_PORT:-8081}:8080
     depends_on:
       course_db:
         condition: service_healthy
     environment:
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://course_db:5432/course_app_db
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://course_db:5432/${POSTGRES_DB:-course_app_db}
+      - DB_USERNAME=${POSTGRES_USER:-postgres}
+      - DB_PASSWORD=${POSTGRES_PASSWORD:-changeme}
+      - DB_HOST=course_db
+      - DB_PORT=5432
+      - DB_NAME=${POSTGRES_DB:-course_app_db}
     networks:
       - spring-cloud-network
 
@@ -17,11 +22,11 @@ services:
     container_name: course_db
     image: postgres
     ports:
-      - 5435:5432
+      - ${DOCKER_DB_PORT:-5435}:5432
     environment:
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=This28isdb
-      - POSTGRES_DB=course_app_db
+      - POSTGRES_USER=${POSTGRES_USER:-postgres}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-changeme}
+      - POSTGRES_DB=${POSTGRES_DB:-course_app_db}
     volumes:
       - db-data:/var/lib/postgresql/data
     healthcheck:

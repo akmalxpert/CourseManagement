@@ -1,11 +1,11 @@
 server:
-  port: 8080
+  port: ${SERVER_PORT:8080}
 spring:
   datasource:
     driver-class-name: org.postgresql.Driver
-    username: postgres
-    url: jdbc:postgresql://localhost:5432/course_app_db
-    password: This28isdb
+    username: ${DB_USERNAME:postgres}
+    url: jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5432}/${DB_NAME:course_app_db}
+    password: ${DB_PASSWORD:changeme}
 #  jpa:
 #    generate-ddl: true
 #    hibernate:
@@ -26,4 +26,6 @@ logging:
   level:
     org:
       springframework:
-        web: debug
+        web: ${LOG_LEVEL:info}
+    uz:
+      exadel: ${LOG_LEVEL:info}
