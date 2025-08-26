@@ -43,3 +43,8 @@ build/
 **/application-local.yml
 **/application-local.properties
 **/secrets.yml
+
+### Log Files ###
+logs/
+*.log
+*.log.*

@@ -29,10 +29,10 @@ public class CourseValidationServiceImpl implements CourseValidationService {
         if (groupId != null && schoolId != null) {
             throw new ValidationException("Only groupId or schoolId should be provided");
         } else if (schoolId != null) {
-            logger.info("Validating school ID for CourseDTO");
+            logger.debug("Validating school ID: {}", schoolId);
             ValidatorUtils.validateId(schoolId);
         } else if (groupId != null) {
-            logger.info("Validating group ID for CourseDTO");
+            logger.debug("Validating group ID: {}", groupId);
             ValidatorUtils.validateId(groupId);
         } else {
             throw new MissingMandatoryFieldException("GroupId or SchoolId");
@@ -51,10 +51,12 @@ public class CourseValidationServiceImpl implements CourseValidationService {
     }
 
     private void commonValidate(CourseDTO courseDTO) {
+        logger.debug("Validating course: {}", courseDTO.getName());
+        
         if (courseDTO.getCode() != null) {
             ValidatorUtils.checkNullableAndMaxLength(courseDTO.getCode(), 15, "Course Code");
         }
-        logger.info("Validating schoolId from Course DTO");
+        
         ValidatorUtils.validateId(courseDTO.getSchoolId());
 
         if (!StringUtils.hasText(courseDTO.getName())) {

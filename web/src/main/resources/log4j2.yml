@@ -7,12 +7,6 @@ Configuration:
       PatternLayout:
         Pattern: "[%-5level] %d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %c{1} - %msg%n"
 
-    #File:
-    #  name: File
-    #  fileName: logs/app.log
-    #  PatternLayout:
-    #    Pattern: "%d %p %C{1.} [%t] %m%n"
-
     RollingFile:
       - name: LogToRollingFile
         fileName: logs/app.log
@@ -25,16 +19,53 @@ Configuration:
         DefaultRollOverStrategy:
           max: 10
 
+      - name: ErrorLogFile
+        fileName: logs/error.log
+        filePattern: "logs/$${date:yyyy-MM}/error-%d{MM-dd-yyyy}-%i.log.gz"
+        PatternLayout:
+          pattern: "[%-5level] %d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %c{1} - %msg%n"
+        Policies:
+          SizeBasedTriggeringPolicy:
+            size: 5MB
+        DefaultRollOverStrategy:
+          max: 20
+        ThresholdFilter:
+          level: WARN
+
   Loggers:
     logger:
       - name: uz.exadel
-        level: debug
+        level: ${LOG_LEVEL:-info}
+        additivity: false
+        AppenderRef:
+          - ref: LogToConsole
+          - ref: LogToRollingFile
+          - ref: ErrorLogFile
+
+      - name: uz.exadel.exception.GlobalExceptionHandler
+        level: ${LOG_LEVEL:-info}
+        additivity: false
+        AppenderRef:
+          - ref: LogToConsole
+          - ref: LogToRollingFile
+          - ref: ErrorLogFile
+
+      - name: org.springframework.web
+        level: ${LOG_LEVEL:-info}
+        additivity: false
+        AppenderRef:
+          - ref: LogToConsole
+          - ref: LogToRollingFile
+
+      - name: org.springframework.security
+        level: ${LOG_LEVEL:-info}
         additivity: false
         AppenderRef:
           - ref: LogToConsole
           - ref: LogToRollingFile
 
     Root:
-      level: error
+      level: warn
       AppenderRef:
-        ref: LogToConsole
+        - ref: LogToConsole
+        - ref: ErrorLogFile
