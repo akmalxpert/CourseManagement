@@ -31,10 +31,19 @@ public class CourseController {
         return ResponseEntity.ok(courseService.get(id));
     }
 
+    @GetMapping("/all")
+    public ResponseEntity<ResponseData> getAllCourses() {
+        return ResponseEntity.ok(courseService.getAll());
+    }
+
     @GetMapping
     public ResponseEntity<ResponseData> getCoursesBySchoolIdOrGroupId(
             @RequestParam(required = false) String schoolId,
             @RequestParam(required = false) String groupId) {
+        // If both parameters are null, return all courses
+        if (schoolId == null && groupId == null) {
+            return ResponseEntity.ok(courseService.getAll());
+        }
         courseValidationService.validateGetBySchoolIdOrGroupId(schoolId, groupId);
         return ResponseEntity.ok(courseService.getBySchoolIdOrGroupId(schoolId, groupId));
     }

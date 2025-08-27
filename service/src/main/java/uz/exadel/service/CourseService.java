@@ -6,6 +6,8 @@ import uz.exadel.dtos.CourseDTO;
 
 @Service
 public interface CourseService {
+    ResponseData getAll();
+    
     ResponseData getBySchoolIdOrGroupId(String schoolId, String groupId);
 
     ResponseData add(CourseDTO courseDTO);

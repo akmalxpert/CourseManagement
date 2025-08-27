@@ -38,6 +38,14 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
+    public ResponseData getAll() {
+        logger.info("Retrieving all courses");
+        List<Course> courseList = courseRepository.findAll();
+        logger.info("Found {} courses", courseList.size());
+        return new ResponseData(courseList);
+    }
+
+    @Override
     public ResponseData getBySchoolIdOrGroupId(String schoolId, String groupId) {
         logger.info("Retrieving courses - schoolId: {}, groupId: {}", schoolId, groupId);
         

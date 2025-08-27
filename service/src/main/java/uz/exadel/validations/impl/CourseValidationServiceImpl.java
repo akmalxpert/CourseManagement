@@ -34,9 +34,8 @@ public class CourseValidationServiceImpl implements CourseValidationService {
         } else if (groupId != null) {
             logger.debug("Validating group ID: {}", groupId);
             ValidatorUtils.validateId(groupId);
-        } else {
-            throw new MissingMandatoryFieldException("GroupId or SchoolId");
         }
+        // Allow both to be null - this will return all courses
     }
 
     @Override
