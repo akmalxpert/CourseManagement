@@ -6,6 +6,8 @@ import uz.exadel.dtos.ResponseData;
 
 @Service
 public interface GroupService {
+    ResponseData getAll();
+    
     ResponseData add(GroupDTO groupDTO);
 
     ResponseData get(String id);

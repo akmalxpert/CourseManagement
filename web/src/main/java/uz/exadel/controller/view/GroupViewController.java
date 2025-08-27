@@ -16,19 +16,19 @@ import java.util.Objects;
 
 @Controller
 @RequestMapping("/group")
-public class GroupViewController {
+public class GroupViewController extends BaseViewController {
     private final GroupController groupController;
-    private final SchoolController schoolController;
-
 
     public GroupViewController(GroupController groupController, SchoolController schoolController) {
+        super(schoolController);
         this.groupController = groupController;
-        this.schoolController = schoolController;
     }
 
     @GetMapping
-    public String showAll(@RequestParam("schoolId") String schoolId, Model model) {
-        ResponseEntity<ResponseData> response = groupController.getGroupsBySchoolIdAndFaculty(schoolId, null);
+    public String showAll(@RequestParam(value = "schoolId", required = false) String schoolId, 
+                         @RequestParam(value = "faculty", required = false) String faculty, 
+                         Model model) {
+        ResponseEntity<ResponseData> response = groupController.getGroupsBySchoolIdAndFaculty(schoolId, faculty);
         Object list = Objects.requireNonNull(response.getBody()).getData();
         model.addAttribute("groupList", list);
         model.addAttribute("groupDTO", new GroupDTO());
@@ -36,6 +36,22 @@ public class GroupViewController {
         ResponseEntity<ResponseData> schoolsResponse = schoolController.getSchools();
         Object schoolList = Objects.requireNonNull(schoolsResponse.getBody()).getData();
         model.addAttribute("schoolList", (List<School>) schoolList);
+        
+        // Add context information for breadcrumbs and navigation
+        if (schoolId != null) {
+            model.addAttribute("schoolId", schoolId);
+            // Get school name for better UX
+            try {
+                ResponseEntity<ResponseData> schoolResponse = schoolController.getSchoolById(schoolId);
+                Object school = Objects.requireNonNull(schoolResponse.getBody()).getData();
+                model.addAttribute("schoolName", ((School) school).getName());
+            } catch (Exception e) {
+                // If school not found, continue without name
+            }
+        }
+        if (faculty != null) {
+            model.addAttribute("faculty", faculty);
+        }
 
         return "group";
     }

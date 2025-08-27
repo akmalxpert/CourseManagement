@@ -29,6 +29,12 @@ public class GroupServiceImpl implements GroupService {
     }
 
     @Override
+    public ResponseData getAll() {
+        List<Group> groups = groupRepository.findAll();
+        return new ResponseData(groups);
+    }
+
+    @Override
     public ResponseData add(GroupDTO groupDTO) {
         String schoolId = groupDTO.getSchoolId();
         schoolRepository.findById(UUID.fromString(schoolId)).orElseThrow(SchoolNotFoundException::new);

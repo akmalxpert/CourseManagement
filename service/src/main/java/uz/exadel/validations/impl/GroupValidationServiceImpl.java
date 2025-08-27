@@ -22,8 +22,11 @@ public class GroupValidationServiceImpl implements GroupValidationService {
 
     @Override
     public void validateGetGroupBySchoolIdAndFaculty(String schoolId, String faculty) {
-        logger.info("Validating schoolId");
-        ValidatorUtils.validateId(schoolId);
+        if (schoolId != null) {
+            logger.debug("Validating schoolId");
+            ValidatorUtils.validateId(schoolId);
+        }
+        // Allow schoolId to be null - this will return all groups
         if (faculty != null) {
             validateFaculty(faculty);
         }

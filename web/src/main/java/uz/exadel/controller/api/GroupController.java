@@ -31,10 +31,19 @@ public class GroupController {
         return ResponseEntity.ok(groupService.get(id));
     }
 
+    @GetMapping("/all")
+    public ResponseEntity<ResponseData> getAllGroups() {
+        return ResponseEntity.ok(groupService.getAll());
+    }
+
     @GetMapping
     public ResponseEntity<ResponseData> getGroupsBySchoolIdAndFaculty(
-            @RequestParam String schoolId,
+            @RequestParam(required = false) String schoolId,
             @RequestParam(required = false) String faculty) {
+        // If schoolId is null, return all groups
+        if (schoolId == null) {
+            return ResponseEntity.ok(groupService.getAll());
+        }
         groupValidationService.validateGetGroupBySchoolIdAndFaculty(schoolId, faculty);
         return ResponseEntity.ok(groupService.getBySchoolIdAndFaculty(schoolId, faculty));
     }

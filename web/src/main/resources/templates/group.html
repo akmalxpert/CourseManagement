@@ -6,44 +6,167 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
 
-    <title>Group</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
-          integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <title>Groups Management | Course Management System</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome Icons -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Main CSS -->
+    <link th:href="@{/css/main.css}" rel="stylesheet">
 </head>
 <body>
-<nav th:insert="fragments/navbar :: navbar">
+<nav th:insert="fragments/navbar :: navbar"></nav>
 
-</nav>
-<section class="container col-8">
-    <h2 class="text-center">Groups List</h2>
-    <table class="table table-striped table-responsive-md">
-        <thead>
-        <tr>
-            <th>Name</th>
-            <th>Level</th>
-            <th>Faculty</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr th:each="group: ${groupList}">
-            <td th:text="${group.name}"></td>
-            <td th:text="${group.level}"></td>
-            <td th:text="${group.faculty}"></td>
-            <td>
-                <a class="btn btn-warning" data-bs-toggle="modal"
-                   data-bs-target="#updateModal">Update</a>
-                <div class="modal fade" id="updateModal" tabindex="-1" role="dialog" aria-labelledby="updateModalLabel"
+    <!-- Page Header -->
+    <div class="page-header">
+        <div class="container">
+            <nav aria-label="breadcrumb" class="breadcrumb-modern">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item">
+                        <a th:href="@{/}">
+                            <i class="fas fa-home me-1"></i>Dashboard
+                        </a>
+                    </li>
+                    <li class="breadcrumb-item" th:if="${schoolName}">
+                        <span th:text="${schoolName}">School Name</span>
+                    </li>
+                    <li class="breadcrumb-item active" aria-current="page">Groups</li>
+                </ol>
+            </nav>
+            <div class="row align-items-center">
+                <div class="col-md-6">
+                    <h1 class="h2 mb-2">
+                        <i class="fas fa-layer-group text-info me-2"></i>
+                        Groups Management
+                    </h1>
+                    <p class="text-muted mb-0" th:if="${schoolName}">
+                        Academic groups for <strong th:text="${schoolName}">School Name</strong>
+                    </p>
+                    <p class="text-muted mb-0" th:unless="${schoolName}">
+                        Manage academic groups and class organization
+                    </p>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <button type="button" class="btn btn-primary-modern" data-bs-toggle="modal" data-bs-target="#addModal">
+                        <i class="fas fa-plus me-2"></i>
+                        Add New Group
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="container">
+        <!-- Groups Table -->
+        <div class="table-container" th:if="${groupList != null and !groupList.isEmpty()}">
+            <div class="table-header">
+                <div class="row align-items-center">
+                    <div class="col-md-6">
+                        <h5 class="mb-0">
+                            <span th:text="${#lists.size(groupList)}">0</span> Groups Found
+                        </h5>
+                    </div>
+                    <div class="col-md-6 text-md-end">
+                        <div class="input-group" style="max-width: 300px; margin-left: auto;">
+                            <span class="input-group-text">
+                                <i class="fas fa-search text-muted"></i>
+                            </span>
+                            <input type="text" class="form-control" placeholder="Search groups..." id="searchInput">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="table-responsive">
+                <table class="table table-modern" id="groupsTable">
+                    <thead>
+                        <tr>
+                            <th>Group Information</th>
+                            <th>Academic Level</th>
+                            <th>Faculty</th>
+                            <th class="text-center">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="group : ${groupList}">
+                            <td>
+                                <div class="course-name" th:text="${group.name}">Group Name</div>
+                                <div class="course-info">
+                                    <i class="fas fa-school me-1"></i>
+                                    <span th:text="${group.school != null ? group.school.name : 'Unknown School'}">School Name</span>
+                                </div>
+                            </td>
+                            <td>
+                                <span class="stats-badge">
+                                    <i class="fas fa-layer-group me-1"></i>
+                                    Level <span th:text="${group.level}">1</span>
+                                </span>
+                            </td>
+                            <td>
+                                <div class="course-info">
+                                    <i class="fas fa-graduation-cap me-1"></i>
+                                    <span th:text="${group.faculty}">Faculty Name</span>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="btn-group-modern d-flex flex-wrap gap-1 justify-content-center">
+                                    <a class="btn btn-warning-modern btn-sm" data-bs-toggle="modal"
+                                       data-bs-target="#updateModal" title="Edit Group"
+                                       th:data-group-id="${group.id}"
+                                       th:data-group-name="${group.name}"
+                                       th:data-group-level="${group.level}"
+                                       th:data-group-faculty="${group.faculty}"
+                                       th:data-school-id="${group.schoolId}">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+                                    <a th:href="@{/group/delete/{id}(id=${group.id})}" 
+                                       class="btn btn-danger-modern btn-sm" title="Delete Group"
+                                       onclick="return confirm('Are you sure you want to delete this group?')">
+                                        <i class="fas fa-trash"></i>
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Empty State -->
+        <div class="empty-state" th:if="${groupList == null or groupList.isEmpty()}">
+            <div class="table-container">
+                <i class="fas fa-layer-group"></i>
+                <h4>No Groups Found</h4>
+                <p>There are no academic groups to display. Create some groups to get started.</p>
+                <button type="button" class="btn btn-primary-modern" data-bs-toggle="modal" data-bs-target="#addModal">
+                    <i class="fas fa-plus me-2"></i>
+                    Add First Group
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Update Modal -->
+    <div class="modal fade" id="updateModal" tabindex="-1" role="dialog" aria-labelledby="updateModalLabel"
                      aria-hidden="true">
-                    <div class="modal-dialog" role="document">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="updateModalLabel">Update Group</h5>
-                                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
+                    <div class="modal-dialog modal-lg" role="document">
+                        <div class="modal-content border-0 shadow-lg">
+                            <div class="modal-header bg-warning text-white border-0">
+                                <div class="d-flex align-items-center">
+                                    <i class="fas fa-layer-group me-3 fs-4"></i>
+                                    <div>
+                                        <h5 class="modal-title mb-0" id="updateModalLabel">Update Group</h5>
+                                        <small class="opacity-75">Modify group information</small>
+                                    </div>
+                                </div>
+                                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                             </div>
-                            <div class="modal-body">
-                                <form action="#" th:action="@{'/group/update/' + ${group.id}}" th:object="${groupDTO}"
+                            <div class="modal-body p-4">
+                                <form id="updateGroupForm" action="#" th:object="${groupDTO}"
                                       th:method="PUT" class="container col-7">
 
                                     <input name="_method" type="hidden" value="PUT"/>
@@ -80,33 +203,25 @@
                         </div>
                     </div>
                 </div>
+                    </tbody>
+                </table>
+            </div>
+        </div>
 
-            </td>
-            <td>
-                <a th:href="@{/group/delete/{id}(id=${group.id})}" class="btn btn-danger">Delete</a>
-            </td>
-            <td>
-                <a th:href="@{'/student?groupId='+${group.id}}" class="btn btn-info">Show Students</a>
-            </td>
-            <td>
-                <a th:href="@{'/course?groupId='+${group.id}}" class="btn btn-outline-warning">Show Courses</a>
-            </td>
-        </tr>
-        </tbody>
-    </table>
-
-
-    <a class="btn btn-info mb-3" data-bs-toggle="modal" data-bs-target="#addModal"> Add New Group </a>
-
+    <!-- Add Modal -->
     <div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-labelledby="addModalLabel"
          aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="addModalLabel">Add New Group</h5>
-                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content border-0 shadow-lg">
+                <div class="modal-header bg-primary text-white border-0">
+                    <div class="d-flex align-items-center">
+                        <i class="fas fa-plus-circle me-3 fs-4"></i>
+                        <div>
+                            <h5 class="modal-title mb-0" id="addModalLabel">Add New Group</h5>
+                            <small class="opacity-75">Create a new academic group</small>
+                        </div>
+                    </div>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <form action="#" th:action="@{/group/save}" th:object="${groupDTO}"
@@ -143,10 +258,38 @@
             </div>
         </div>
     </div>
+    </div>
 </section>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
-        crossorigin="anonymous"></script>
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Main JS -->
+    <script th:src="@{/js/main.js}"></script>
+    
+    <!-- Group Update Modal Script -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const updateModal = document.getElementById('updateModal');
+            const updateForm = document.getElementById('updateGroupForm');
+            
+            updateModal.addEventListener('show.bs.modal', function(event) {
+                const button = event.relatedTarget;
+                const groupId = button.getAttribute('data-group-id');
+                const groupName = button.getAttribute('data-group-name');
+                const groupLevel = button.getAttribute('data-group-level');
+                const groupFaculty = button.getAttribute('data-group-faculty');
+                const schoolId = button.getAttribute('data-school-id');
+                
+                // Update form action
+                updateForm.action = '/group/update/' + groupId;
+                
+                // Populate form fields
+                document.getElementById('name').value = groupName || '';
+                document.getElementById('level').value = groupLevel || '';
+                document.getElementById('faculty').value = groupFaculty || '';
+                document.getElementById('school').value = schoolId || '';
+            });
+        });
+    </script>
 </body>
 </html>
