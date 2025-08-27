@@ -6,191 +6,499 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
 
-    <title>Teacher</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
-          integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <title>Teachers Management | Course Management System</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome Icons -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Main CSS -->
+    <link th:href="@{/css/main.css}" rel="stylesheet">
 
 </head>
 <body>
-<nav th:insert="fragments/navbar :: navbar">
+<nav th:insert="fragments/navbar :: navbar"></nav>
 
-</nav>
-<section class="container col-8">
-    <h2 class="text-center">Teachers List</h2>
-    <table class="table table-striped table-responsive-md">
-        <thead>
-        <tr>
-            <th>Full Name</th>
-            <th>Positions</th>
-            <th>Email</th>
-            <th>Office Phone Number</th>
-            <th>Courses</th>
-            <th>Actions</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr th:each="teacher: ${teacherList}">
-            <td th:text="${teacher.fullName}"></td>
-            <td>
-                <p th:each="position: ${teacher.positions}">
-                    <span th:text="${position}"></span>
-                </p>
-            </td>
-            <td th:text="${teacher.email}"></td>
-            <td th:text="${teacher.officePhoneNumber}"></td>
-            <td>
-                <p th:each="course: ${teacher.courses}">
-                    <span th:text="${course.name}"></span>
-                </p>
-            </td>
+    <!-- Page Header -->
+    <div class="page-header">
+        <div class="container">
+            <nav aria-label="breadcrumb" class="breadcrumb-modern">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item">
+                        <a th:href="@{/}">
+                            <i class="fas fa-home me-1"></i>Dashboard
+                        </a>
+                    </li>
+                    <li class="breadcrumb-item" th:if="${schoolName}">
+                        <span th:text="${schoolName}">School Name</span>
+                    </li>
+                    <li class="breadcrumb-item active" aria-current="page">Teachers</li>
+                </ol>
+            </nav>
+            <div class="row align-items-center">
+                <div class="col-md-6">
+                    <h1 class="h2 mb-2">
+                        <i class="fas fa-chalkboard-teacher text-warning me-2"></i>
+                        Teachers Management
+                    </h1>
+                    <p class="text-muted mb-0" th:if="${schoolName}">
+                        Faculty members for <strong th:text="${schoolName}">School Name</strong>
+                    </p>
+                    <p class="text-muted mb-0" th:unless="${schoolName}">
+                        Manage teaching staff and faculty members
+                    </p>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <button type="button" class="btn btn-primary-modern" data-bs-toggle="modal" data-bs-target="#addModal">
+                        <i class="fas fa-plus me-2"></i>
+                        Add New Teacher
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
 
-            <td>
-                <a class="btn btn-warning" data-bs-toggle="modal"
-                   data-bs-target="#updateModal">Update</a>
-                <div class="modal fade" id="updateModal" tabindex="-1" role="dialog" aria-labelledby="updateModalLabel"
+    <!-- Main Content -->
+    <div class="container">
+        <!-- Teachers Table -->
+        <div class="table-container" th:if="${teacherList != null and !teacherList.isEmpty()}">
+            <div class="table-header">
+                <div class="row align-items-center">
+                    <div class="col-md-6">
+                        <h5 class="mb-0">
+                            <span th:text="${#lists.size(teacherList)}">0</span> Teachers Found
+                        </h5>
+                    </div>
+                    <div class="col-md-6 text-md-end">
+                        <div class="input-group" style="max-width: 300px; margin-left: auto;">
+                            <span class="input-group-text">
+                                <i class="fas fa-search text-muted"></i>
+                            </span>
+                            <input type="text" class="form-control" placeholder="Search teachers..." id="searchInput">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="table-responsive">
+                <table class="table table-modern" id="teachersTable">
+                    <thead>
+                        <tr>
+                            <th>Teacher Information</th>
+                            <th>Position & Contact</th>
+                            <th>Courses</th>
+                            <th class="text-center">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="teacher : ${teacherList}">
+                            <td>
+                                <div class="course-name" th:text="${teacher.fullName}">Teacher Name</div>
+                            </td>
+                            <td>
+                                <div class="course-info" th:if="${teacher.positions != null and !teacher.positions.isEmpty()}">
+                                    <div th:each="position : ${teacher.positions}" class="mb-1">
+                                        <span class="stats-badge">
+                                            <i class="fas fa-briefcase me-1"></i>
+                                            <span th:text="${position}">Position</span>
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="course-info mt-2" th:if="${teacher.email}">
+                                    <i class="fas fa-envelope me-1"></i>
+                                    <span th:text="${teacher.email}">Email</span>
+                                </div>
+                                <div class="course-info mt-1" th:if="${teacher.officePhoneNumber}">
+                                    <i class="fas fa-phone me-1"></i>
+                                    <span th:text="${teacher.officePhoneNumber}">Phone</span>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="course-info" th:if="${teacher.courses != null and !teacher.courses.isEmpty()}">
+                                    <div th:each="course : ${teacher.courses}" class="mt-1">
+                                        <span class="course-code" th:text="${course.name}">Course Name</span>
+                                    </div>
+                                </div>
+                                <div class="course-info" th:unless="${teacher.courses != null and !teacher.courses.isEmpty()}">
+                                    <i class="fas fa-question-circle me-1 text-muted"></i>
+                                    <span class="text-muted">No courses assigned</span>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="btn-group-modern d-flex flex-wrap gap-1 justify-content-center">
+                                    <a class="btn btn-warning-modern btn-sm" data-bs-toggle="modal"
+                                       data-bs-target="#updateModal" title="Edit Teacher"
+                                       th:data-teacher-id="${teacher.id}"
+                                       th:data-teacher-fullname="${teacher.fullName}"
+                                       th:data-teacher-email="${teacher.email}"
+                                       th:data-school-id="${teacher.schoolId}">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+                                    <a th:href="@{/teacher/delete/{id}(id=${teacher.id})}" 
+                                       class="btn btn-danger-modern btn-sm" title="Delete Teacher"
+                                       onclick="return confirm('Are you sure you want to delete this teacher?')">
+                                        <i class="fas fa-trash"></i>
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Empty State -->
+        <div class="empty-state" th:if="${teacherList == null or teacherList.isEmpty()}">
+            <div class="table-container">
+                <i class="fas fa-chalkboard-teacher"></i>
+                <h4>No Teachers Found</h4>
+                <p>There are no teachers to display. Add some faculty members to get started.</p>
+                <button type="button" class="btn btn-primary-modern" data-bs-toggle="modal" data-bs-target="#addModal">
+                    <i class="fas fa-plus me-2"></i>
+                    Add First Teacher
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Update Modal -->
+    <div class="modal fade" id="updateModal" tabindex="-1" role="dialog" aria-labelledby="updateModalLabel"
                      aria-hidden="true">
-                    <div class="modal-dialog" role="document">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="updateModalLabel">Update Teacher</h5>
-                                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
+                    <div class="modal-dialog modal-lg" role="document">
+                        <div class="modal-content border-0 shadow-lg">
+                            <div class="modal-header bg-warning text-white border-0">
+                                <div class="d-flex align-items-center">
+                                    <i class="fas fa-user-edit me-3 fs-4"></i>
+                                    <div>
+                                        <h5 class="modal-title mb-0" id="updateModalLabel">Update Teacher</h5>
+                                        <small class="opacity-75">Modify teacher information</small>
+                                    </div>
+                                </div>
+                                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                             </div>
-                            <div class="modal-body">
-                                <form action="#" th:action="@{'/teacher/update/' + ${teacher.id}}"
-                                      th:object="${teacherDTO}"
-                                      th:method="PUT" class="container col-7">
-
+                            <div class="modal-body p-4">
+                                <form id="updateTeacherForm" action="#" th:object="${teacherDTO}" th:method="PUT">
                                     <input name="_method" type="hidden" value="PUT"/>
-
-                                    <label class="form-label" for="fullName">Fullname</label>
-                                    <input id="fullName" type="text" th:field="*{fullName}"
-                                           class="form-control mb-4">
-
-                                    <label class="form-label" for="email">Email</label>
-                                    <input id="email" type="text" th:field="*{email}"
-                                           class="form-control mb-4">
-
-                                    <label class="form-label" for="officePhoneNumber">Office Phone Number</label>
-                                    <input id="officePhoneNumber" type="text" th:field="*{officePhoneNumber}"
-                                           class="form-control mb-4">
-
-                                    <label class="form-label" for="positions">Select Positions</label>
-                                    <select id="positions" th:field="*{positions}" multiple="multiple"
-                                            class="form-control mb-4">
-                                        <option th:each="position : ${positionsList}"
-                                                th:value="${position}"
-                                                th:text="${position}">
-                                            <!--                                                th:field="*{positions}"-->
-                                    </select>
-
-                                    <label class="form-label" for="courseList">Select Courses</label>
-                                    <select id="courseList" th:field="*{courses}" multiple="multiple"
-                                            class="form-control mb-4">
-                                        <option th:each="course : ${courseList}"
-                                                th:value="${course.id}"
-                                                th:text="${course.name}">
-                                            <!--                                                th:field="*{courses}"-->
-                                    </select>
-
-                                    <label class="form-label" for="school">Select School</label>
-                                    <select id="school" th:field="*{schoolId}" class="form-select form-control mb-4">
-                                        <option th:each="school : ${schoolList}"
-                                                th:value="${school.id}"
-                                                th:text="${school.name}"/>
-                                    </select>
-
-                                    <p class="text-sm-center text-danger">*Please use CTRL + MOUSE if you want to choose
-                                        multiple options</p>
-
-                                    <div class="d-flex justify-content-center">
-                                        <button type="submit" class="btn btn-success col-3 mx-3"> Save</button>
+                                    
+                                    <div class="row g-3">
+                                        <!-- Personal Information Section -->
+                                        <div class="col-12">
+                                            <h6 class="text-muted mb-3">
+                                                <i class="fas fa-user me-2"></i>Personal Information
+                                            </h6>
+                                        </div>
+                                        
+                                        <div class="col-md-6">
+                                            <label class="form-label fw-semibold" for="fullName">
+                                                <i class="fas fa-user me-1 text-warning"></i>Full Name *
+                                            </label>
+                                            <input id="fullName" type="text" th:field="*{fullName}"
+                                                   class="form-control form-control-modern" placeholder="Enter full name" required>
+                                        </div>
+                                        
+                                        <div class="col-md-6">
+                                            <label class="form-label fw-semibold" for="email">
+                                                <i class="fas fa-envelope me-1 text-warning"></i>Email Address *
+                                            </label>
+                                            <input id="email" type="email" th:field="*{email}"
+                                                   class="form-control form-control-modern" placeholder="teacher@example.com" required>
+                                        </div>
+                                        
+                                        <!-- Professional Information Section -->
+                                        <div class="col-12 mt-4">
+                                            <h6 class="text-muted mb-3">
+                                                <i class="fas fa-briefcase me-2"></i>Professional Details
+                                            </h6>
+                                        </div>
+                                        
+                                        <div class="col-md-6">
+                                            <label class="form-label fw-semibold" for="officePhoneNumber">
+                                                <i class="fas fa-phone me-1 text-warning"></i>Office Phone
+                                            </label>
+                                            <input id="officePhoneNumber" type="tel" th:field="*{officePhoneNumber}"
+                                                   class="form-control form-control-modern" placeholder="+1 (555) 123-4567">
+                                        </div>
+                                        
+                                        <div class="col-md-6">
+                                            <label class="form-label fw-semibold" for="school">
+                                                <i class="fas fa-school me-1 text-warning"></i>School *
+                                            </label>
+                                            <select id="school" th:field="*{schoolId}" class="form-select form-control-modern" required>
+                                                <option value="">Select School</option>
+                                                <option th:each="school : ${schoolList}"
+                                                        th:value="${school.id}"
+                                                        th:text="${school.name}"/>
+                                            </select>
+                                        </div>
+                                        
+                                        <div class="col-12">
+                                            <label class="form-label fw-semibold" for="positions">
+                                                <i class="fas fa-graduation-cap me-1 text-warning"></i>Positions
+                                            </label>
+                                            <select id="positions" th:field="*{positions}" multiple="multiple"
+                                                    class="form-select form-control-modern" size="3">
+                                                <option th:each="position : ${positionsList}"
+                                                        th:value="${position}"
+                                                        th:text="${position}">
+                                            </select>
+                                            <div class="form-text">
+                                                <i class="fas fa-info-circle me-1"></i>
+                                                Hold Ctrl (Cmd on Mac) to select multiple positions
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="col-12" th:if="${courseList != null and !courseList.isEmpty()}">
+                                            <label class="form-label fw-semibold" for="courseList">
+                                                <i class="fas fa-book me-1 text-warning"></i>Assigned Courses
+                                            </label>
+                                            <select id="courseList" th:field="*{courses}" multiple="multiple"
+                                                    class="form-select form-control-modern" size="4">
+                                                <option th:each="course : ${courseList}"
+                                                        th:value="${course.id}"
+                                                        th:text="${course.name}">
+                                            </select>
+                                            <div class="form-text">
+                                                <i class="fas fa-info-circle me-1"></i>
+                                                Hold Ctrl (Cmd on Mac) to select multiple courses
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="modal-footer bg-light border-0 mt-4 mx-n4 mb-n4 px-4 py-3">
+                                        <button type="button" class="btn btn-secondary-modern me-2" data-bs-dismiss="modal">
+                                            <i class="fas fa-times me-1"></i>Cancel
+                                        </button>
+                                        <button type="submit" class="btn btn-warning-modern text-white">
+                                            <i class="fas fa-save me-1"></i>Update Teacher
+                                        </button>
                                     </div>
                                 </form>
                             </div>
                         </div>
                     </div>
                 </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
 
-                <a th:href="@{/teacher/delete/{id}(id=${teacher.id})}" class="btn btn-danger">Delete</a>
-            </td>
-        </tr>
-
-        </tbody>
-    </table>
-
-    <a class="btn btn-info mb-3" data-bs-toggle="modal"
-       data-bs-target="#addModal">Add New Teacher</a>
+    <!-- Add Modal -->
     <div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-labelledby="addModalLabel"
          aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="addModalLabel">Add New Teacher</h5>
-                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content border-0 shadow-lg">
+                <div class="modal-header bg-primary text-white border-0">
+                    <div class="d-flex align-items-center">
+                        <i class="fas fa-user-plus me-3 fs-4"></i>
+                        <div>
+                            <h5 class="modal-title mb-0" id="addModalLabel">Add New Teacher</h5>
+                            <small class="opacity-75">Create a new faculty member profile</small>
+                        </div>
+                    </div>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <div class="modal-body">
-                    <form action="#" th:action="@{/teacher/save/}"
-                          th:object="${teacherDTO}"
-                          method="POST" class="container col-7">
+                <div class="modal-body p-4">
+                    <form action="#" th:action="@{/teacher/save/}" th:object="${teacherDTO}" method="POST">
+                        <div class="row g-3">
+                            <!-- Personal Information Section -->
+                            <div class="col-12">
+                                <h6 class="text-muted mb-3">
+                                    <i class="fas fa-user me-2"></i>Personal Information
+                                </h6>
+                            </div>
+                            
+                            <div class="col-md-6">
+                                <label class="form-label fw-semibold" for="fullNameForSave">
+                                    <i class="fas fa-user me-1 text-primary"></i>Full Name *
+                                </label>
+                                <input id="fullNameForSave" type="text" th:field="*{fullName}"
+                                       class="form-control form-control-modern" placeholder="Enter full name" required>
+                            </div>
+                            
+                            <div class="col-md-6">
+                                <label class="form-label fw-semibold" for="emailForSave">
+                                    <i class="fas fa-envelope me-1 text-primary"></i>Email Address *
+                                </label>
+                                <input id="emailForSave" type="email" th:field="*{email}"
+                                       class="form-control form-control-modern" placeholder="teacher@example.com" required>
+                            </div>
 
-                        <label class="form-label" for="fullNameForSave">Fullname</label>
-                        <input id="fullNameForSave" type="text" th:field="*{fullName}"
-                               class="form-control mb-4">
-
-                        <label class="form-label" for="emailForSave">Email</label>
-                        <input id="emailForSave" type="text" th:field="*{email}"
-                               class="form-control mb-4">
-
-                        <label class="form-label" for="officePhoneNumberForSave">Office Phone Number</label>
-                        <input id="officePhoneNumberForSave" type="text" th:field="*{officePhoneNumber}"
-                               class="form-control mb-4">
-
-                        <label class="form-label" for="positionsForSave">Select Positions</label>
-                        <select id="positionsForSave" th:field="*{positions}" multiple="multiple"
-                                class="form-control mb-4">
-                            <option th:each="position : ${positionsList}"
-                                    th:value="${position}"
-                                    th:text="${position}">
-                                <!--                                                th:field="*{positions}"-->
-                        </select>
-
-                        <label class="form-label" for="courseListForSave">Select Courses</label>
-                        <select id="courseListForSave" th:field="*{courses}" multiple="multiple"
-                                class="form-control mb-4">
-                            <option th:each="course : ${courseList}"
-                                    th:value="${course.id}"
-                                    th:text="${course.name}">
-                                <!--                                                th:field="*{courses}"-->
-                        </select>
-
-                        <label class="form-label" for="schoolForSave">Select School</label>
-                        <select id="schoolForSave" th:field="*{schoolId}" class="form-select form-control mb-4">
-                            <option th:each="school : ${schoolList}"
-                                    th:value="${school.id}"
-                                    th:text="${school.name}"/>
-                        </select>
-
-                        <p class="text-sm-center text-danger">*Please use CTRL + MOUSE if you want to choose
-                            multiple
-                            options</p>
-
-                        <div class="d-flex justify-content-center">
-                            <button type="submit" class="btn btn-success col-3 mx-3"> Save</button>
+                            
+                            <!-- Professional Information Section -->
+                            <div class="col-12 mt-4">
+                                <h6 class="text-muted mb-3">
+                                    <i class="fas fa-briefcase me-2"></i>Professional Details
+                                </h6>
+                            </div>
+                            
+                            <div class="col-md-6">
+                                <label class="form-label fw-semibold" for="officePhoneNumberForSave">
+                                    <i class="fas fa-phone me-1 text-primary"></i>Office Phone
+                                </label>
+                                <input id="officePhoneNumberForSave" type="tel" th:field="*{officePhoneNumber}"
+                                       class="form-control form-control-modern" placeholder="+1 (555) 123-4567">
+                            </div>
+                            
+                            <div class="col-md-6">
+                                <label class="form-label fw-semibold" for="schoolForSave">
+                                    <i class="fas fa-school me-1 text-primary"></i>School *
+                                </label>
+                                <select id="schoolForSave" th:field="*{schoolId}" class="form-select form-control-modern" required>
+                                    <option value="">Select School</option>
+                                    <option th:each="school : ${schoolList}"
+                                            th:value="${school.id}"
+                                            th:text="${school.name}"/>
+                                </select>
+                            </div>
+                            
+                            <div class="col-12">
+                                <label class="form-label fw-semibold" for="positionsForSave">
+                                    <i class="fas fa-graduation-cap me-1 text-primary"></i>Positions
+                                </label>
+                                <select id="positionsForSave" th:field="*{positions}" multiple="multiple"
+                                        class="form-select form-control-modern" size="3">
+                                    <option th:each="position : ${positionsList}"
+                                            th:value="${position}"
+                                            th:text="${position}">
+                                </select>
+                                <div class="form-text">
+                                    <i class="fas fa-info-circle me-1"></i>
+                                    Hold Ctrl (Cmd on Mac) to select multiple positions
+                                </div>
+                            </div>
+                            
+                            <div class="col-12">
+                                <div class="d-flex justify-content-between align-items-center mb-2">
+                                    <label class="form-label fw-semibold mb-0" for="courseListForSave">
+                                        <i class="fas fa-book me-1 text-primary"></i>Assigned Courses
+                                    </label>
+                                    <button type="button" id="addCourseBtn" class="btn btn-outline-primary btn-sm" 
+                                            title="Add new course to selected school" disabled>
+                                        <i class="fas fa-plus me-1"></i>Add Course
+                                    </button>
+                                </div>
+                                <select id="courseListForSave" th:field="*{courses}" multiple="multiple"
+                                        class="form-select form-control-modern" size="4">
+                                    <option value="" disabled>Select a school first to see available courses</option>
+                                    <option th:each="course : ${courseList}"
+                                            th:value="${course.id}"
+                                            th:text="${course.name}"
+                                            th:data-school-id="${course.school != null ? course.school.id : ''}">
+                                    </option>
+                                </select>
+                                <div class="form-text">
+                                    <i class="fas fa-info-circle me-1"></i>
+                                    Hold Ctrl (Cmd on Mac) to select multiple courses. Courses update based on selected school.
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="modal-footer bg-light border-0 mt-4 mx-n4 mb-n4 px-4 py-3">
+                            <button type="button" class="btn btn-secondary-modern me-2" data-bs-dismiss="modal">
+                                <i class="fas fa-times me-1"></i>Cancel
+                            </button>
+                            <button type="submit" class="btn btn-primary-modern">
+                                <i class="fas fa-save me-1"></i>Save Teacher
+                            </button>
                         </div>
                     </form>
                 </div>
             </div>
         </div>
     </div>
+    </div>
 
 </section>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
-        crossorigin="anonymous"></script>
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Main JS -->
+    <script th:src="@{/js/main.js}"></script>
+    
+    <!-- Teacher Update Modal Script -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const updateModal = document.getElementById('updateModal');
+            const updateForm = document.getElementById('updateTeacherForm');
+            
+            updateModal.addEventListener('show.bs.modal', function(event) {
+                const button = event.relatedTarget;
+                const teacherId = button.getAttribute('data-teacher-id');
+                const teacherFullname = button.getAttribute('data-teacher-fullname');
+                const teacherEmail = button.getAttribute('data-teacher-email');
+                const schoolId = button.getAttribute('data-school-id');
+                
+                // Update form action
+                updateForm.action = '/teacher/update/' + teacherId;
+                
+                // Populate form fields
+                document.getElementById('fullName').value = teacherFullname || '';
+                document.getElementById('email').value = teacherEmail || '';
+                document.getElementById('school').value = schoolId || '';
+            });
+        });
+    
+        // Smart Course Filtering for Add Teacher Modal
+        document.addEventListener('DOMContentLoaded', function() {
+            const schoolSelect = document.getElementById('schoolForSave');
+            const courseSelect = document.getElementById('courseListForSave');
+            const addCourseBtn = document.getElementById('addCourseBtn');
+            
+            // Store all course options for filtering
+            let allCourseOptions = Array.from(courseSelect.querySelectorAll('option[data-school-id]'));
+            
+            function filterCourses() {
+                const selectedSchoolId = schoolSelect.value;
+                
+                // Clear current options except the first disabled one
+                courseSelect.innerHTML = '';
+                
+                if (!selectedSchoolId) {
+                    // No school selected
+                    courseSelect.innerHTML = '<option value="" disabled>Select a school first to see available courses</option>';
+                    addCourseBtn.disabled = true;
+                    addCourseBtn.title = 'Select a school first';
+                } else {
+                    // Filter courses for selected school
+                    const filteredCourses = allCourseOptions.filter(option => 
+                        option.dataset.schoolId === selectedSchoolId
+                    );
+                    
+                    if (filteredCourses.length === 0) {
+                        courseSelect.innerHTML = '<option value="" disabled>No courses available for this school</option>';
+                    } else {
+                        courseSelect.innerHTML = '<option value="" disabled>Select courses for this teacher</option>';
+                        filteredCourses.forEach(option => {
+                            courseSelect.appendChild(option.cloneNode(true));
+                        });
+                    }
+                    
+                    // Enable add course button
+                    addCourseBtn.disabled = false;
+                    addCourseBtn.title = 'Add new course to ' + schoolSelect.options[schoolSelect.selectedIndex].text;
+                }
+            }
+            
+            // Handle school selection change
+            schoolSelect.addEventListener('change', filterCourses);
+            
+            // Handle add course button click
+            addCourseBtn.addEventListener('click', function() {
+                const selectedSchoolId = schoolSelect.value;
+                if (selectedSchoolId) {
+                    // Open course creation page with pre-populated school
+                    const courseUrl = `/course/new?schoolId=${selectedSchoolId}`;
+                    window.open(courseUrl, '_blank');
+                }
+            });
+            
+            // Initialize on page load
+            filterCourses();
+        });
+    </script>
 </body>
 </html>

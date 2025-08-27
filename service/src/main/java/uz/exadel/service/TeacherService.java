@@ -10,6 +10,8 @@ public interface TeacherService {
 
     ResponseData get(String id);
 
+    ResponseData getAll();
+
     ResponseData delete(String id);
 
     ResponseData update(TeacherDTO teacherDTO, String id);

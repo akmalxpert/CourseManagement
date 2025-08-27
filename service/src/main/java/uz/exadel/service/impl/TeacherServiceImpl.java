@@ -46,6 +46,12 @@ public class TeacherServiceImpl implements TeacherService {
     }
 
     @Override
+    public ResponseData getAll() {
+        List<Teacher> teachers = teacherRepository.findAll();
+        return new ResponseData(teachers);
+    }
+
+    @Override
     public ResponseData delete(String id) {
         UUID uuid = UUID.fromString(id);
         teacherRepository.findById(uuid).orElseThrow(TeacherNotFoundException::new);

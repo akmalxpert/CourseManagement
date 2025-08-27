@@ -31,8 +31,17 @@ public class TeacherController {
         return ResponseEntity.ok(teacherService.get(id));
     }
 
+    @GetMapping("/all")
+    public ResponseEntity<ResponseData> getAllTeachers() {
+        return ResponseEntity.ok(teacherService.getAll());
+    }
+
     @GetMapping
-    public ResponseEntity<ResponseData> getBySchoolId(@RequestParam String schoolId) {
+    public ResponseEntity<ResponseData> getBySchoolId(@RequestParam(required = false) String schoolId) {
+        // If schoolId is null, return all teachers
+        if (schoolId == null) {
+            return ResponseEntity.ok(teacherService.getAll());
+        }
         teacherValidationService.validateGetBySchoolId(schoolId);
         return ResponseEntity.ok(teacherService.getBySchoolId(schoolId));
     }

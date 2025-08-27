@@ -29,8 +29,11 @@ public class TeacherValidationServiceImpl implements TeacherValidationService {
 
     @Override
     public void validateGetBySchoolId(String schoolId) {
-        logger.info("Validating school ID for TeacherDTO");
-        ValidatorUtils.validateId(schoolId);
+        if (schoolId != null) {
+            logger.debug("Validating school ID for TeacherDTO");
+            ValidatorUtils.validateId(schoolId);
+        }
+        // Allow schoolId to be null - this will return all teachers
     }
 
     @Override
