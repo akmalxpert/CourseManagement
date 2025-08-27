@@ -1,31 +1,137 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
 
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
-          integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome Icons -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <!-- Main CSS -->
+    <link th:href="@{/css/main.css}" rel="stylesheet">
 </head>
 <body>
-<nav class="navbar navbar-expand-lg navbar-light" style="background-color: #ddeeff;" th:fragment="navbar">
-    <div class="container-fluid">
-        <a th:href="@{/}" class="navbar-brand">AS School</a>
-        <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
+<nav class="navbar navbar-expand-lg navbar-modern" th:fragment="navbar">
+    <div class="container">
+        <a th:href="@{/}" class="navbar-brand navbar-brand-modern">
+            <i class="fas fa-graduation-cap me-2"></i>
+            Course Management
+        </a>
+        
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" 
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
-        <div class="collapse navbar-collapse" id="navbarCollapse">
-            <div class="navbar-nav">
-                <a th:href="@{/}" class="nav-item nav-link active">Home</a>
-                <a th:href="@{/school}" class="nav-item nav-link">School</a>
-            </div>
-            <div class="navbar-nav ms-auto">
-                <a href="#" class="nav-item nav-link disabled">Login</a>
+        
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav me-auto">
+                <li class="nav-item">
+                    <a class="nav-link nav-link-modern" th:href="@{/}">
+                        <i class="fas fa-home me-1"></i>
+                        Dashboard
+                    </a>
+                </li>
+                
+                <!-- Management Dropdown -->
+                <li class="nav-item dropdown">
+                    <a class="nav-link nav-link-modern dropdown-toggle" href="#" role="button" 
+                       data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="fas fa-cog me-1"></i>
+                        Management
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-modern">
+                        <li><h6 class="dropdown-header">School Management</h6></li>
+                        <li><a class="dropdown-item dropdown-item-modern" th:href="@{/school}">
+                            <i class="fas fa-school me-2"></i>All Schools
+                        </a></li>
+                        <li><a class="dropdown-item dropdown-item-modern" th:href="@{/school/new}">
+                            <i class="fas fa-plus me-2"></i>Add New School
+                        </a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><h6 class="dropdown-header">Global Views</h6></li>
+                        <li><a class="dropdown-item dropdown-item-modern" th:href="@{/course}">
+                            <i class="fas fa-book-open me-2"></i>All Courses
+                        </a></li>
+                        <li><a class="dropdown-item dropdown-item-modern" th:href="@{/student}">
+                            <i class="fas fa-user-graduate me-2"></i>All Students
+                        </a></li>
+                        <li><a class="dropdown-item dropdown-item-modern" th:href="@{/teacher}">
+                            <i class="fas fa-chalkboard-teacher me-2"></i>All Teachers
+                        </a></li>
+                        <li><a class="dropdown-item dropdown-item-modern" th:href="@{/group}">
+                            <i class="fas fa-layer-group me-2"></i>All Groups
+                        </a></li>
+                    </ul>
+                </li>
+                
+                <!-- Dynamic School Dropdowns -->
+                <li class="nav-item dropdown" th:each="school : ${navbarSchools}" th:if="${navbarSchools != null and !navbarSchools.isEmpty()}">
+                    <a class="nav-link nav-link-modern dropdown-toggle" href="#" role="button" 
+                       data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="fas fa-school me-1"></i>
+                        <span th:text="${school.name}">School Name</span>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-modern">
+                        <li><h6 class="dropdown-header" th:text="${school.name}">School Name</h6></li>
+                        <li><a class="dropdown-item dropdown-item-modern" 
+                               th:href="@{'/school-details/' + ${school.id}}">
+                            <i class="fas fa-info-circle me-2"></i>School Overview
+                        </a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item dropdown-item-modern" 
+                               th:href="@{'/school-details/' + ${school.id} + '/courses'}">
+                            <i class="fas fa-book-open me-2"></i>Courses
+                        </a></li>
+                        <li><a class="dropdown-item dropdown-item-modern" 
+                               th:href="@{'/school-details/' + ${school.id} + '/students'}">
+                            <i class="fas fa-user-graduate me-2"></i>Students
+                        </a></li>
+                        <li><a class="dropdown-item dropdown-item-modern" 
+                               th:href="@{'/school-details/' + ${school.id} + '/teachers'}">
+                            <i class="fas fa-chalkboard-teacher me-2"></i>Teachers
+                        </a></li>
+                        <li><a class="dropdown-item dropdown-item-modern" 
+                               th:href="@{'/school-details/' + ${school.id} + '/groups'}">
+                            <i class="fas fa-layer-group me-2"></i>Groups
+                        </a></li>
+                    </ul>
+                </li>
+            </ul>
+            
+            <div class="d-flex align-items-center">
+                <a href="#" class="btn btn-outline-primary-modern me-2">
+                    <i class="fas fa-chart-bar me-1"></i>
+                    Reports
+                </a>
+                <div class="dropdown">
+                    <button class="btn btn-link nav-link-modern dropdown-toggle" type="button" 
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="fas fa-user-circle me-1"></i>
+                        Account
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end dropdown-menu-modern">
+                        <li><a class="dropdown-item dropdown-item-modern" href="#">
+                            <i class="fas fa-user me-2"></i>Profile
+                        </a></li>
+                        <li><a class="dropdown-item dropdown-item-modern" href="#">
+                            <i class="fas fa-cog me-2"></i>Settings
+                        </a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item dropdown-item-modern" href="#">
+                            <i class="fas fa-sign-out-alt me-2"></i>Logout
+                        </a></li>
+                    </ul>
+                </div>
             </div>
         </div>
     </div>
 </nav>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<!-- Main JS -->
+<script th:src="@{/js/main.js}"></script>
 </body>
 </html>
