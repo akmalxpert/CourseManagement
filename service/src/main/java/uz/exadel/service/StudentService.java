@@ -6,6 +6,8 @@ import uz.exadel.dtos.StudentDTO;
 
 @Service
 public interface StudentService {
+    ResponseData getAll();
+    
     ResponseData add(StudentDTO studentDTO);
 
     ResponseData get(String id);

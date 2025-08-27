@@ -28,13 +28,12 @@ public class StudentValidationServiceImpl implements StudentValidationService {
         if (groupId != null && level != null) {
             throw new ValidationException("Only groupId or level should be provided");
         } else if (groupId != null) {
-            logger.info("Validating group ID for StudentDTO");
+            logger.debug("Validating group ID for StudentDTO");
             ValidatorUtils.validateId(groupId);
         } else if (level != null && (level < 1 || level > 11)) {
             throw new ValidationException("Invalid level (1-11)");
-        } else {
-            throw new MissingMandatoryFieldException("GroupId or Level");
         }
+        // Allow both to be null - this will return all students
     }
 
     @Override
@@ -45,7 +44,7 @@ public class StudentValidationServiceImpl implements StudentValidationService {
     @Override
     public void validateUpdate(String id, StudentDTO studentDTO) {
         ValidatorUtils.validateId(id);
-        commonValidate(studentDTO);
+        updateValidate(studentDTO);
     }
 
     private void commonValidate(StudentDTO studentDTO) {
@@ -69,5 +68,33 @@ public class StudentValidationServiceImpl implements StudentValidationService {
         if (studentDTO.getLevel() < 1 || studentDTO.getLevel() > 11) {
             throw new ValidationException("Invalid level (1-11)");
         }
+    }
+
+    private void updateValidate(StudentDTO studentDTO) {
+        // For updates, all fields are optional, but if provided, they must be valid
+
+        // Validate full name if provided
+        if (studentDTO.getFullName() != null) {
+            ValidatorUtils.checkNullableAndMaxLength(studentDTO.getFullName(), 25, "Full Name");
+        }
+
+        // Validate group ID if provided
+        if (studentDTO.getGroupId() != null) {
+            logger.info("Validating groupId from Student DTO for update");
+            ValidatorUtils.validateId(studentDTO.getGroupId());
+        }
+
+        // Validate courses if provided (courses can be null/empty for updates)
+        if (studentDTO.getCourses() != null && !studentDTO.getCourses().isEmpty()) {
+            logger.info("Start: Validating course IDs from student DTO for update");
+            studentDTO.getCourses().forEach(ValidatorUtils::validateId);
+            logger.info("Finish: Validating course IDs from student DTO for update");
+        }
+
+        // Validate level if provided
+        if (studentDTO.getLevel() != null && (studentDTO.getLevel() < 1 || studentDTO.getLevel() > 11)) {
+            throw new ValidationException("Invalid level (1-11)");
+        }
+
     }
 }

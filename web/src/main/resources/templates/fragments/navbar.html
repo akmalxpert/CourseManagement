@@ -81,19 +81,19 @@
                         </a></li>
                         <li><hr class="dropdown-divider"></li>
                         <li><a class="dropdown-item dropdown-item-modern" 
-                               th:href="@{'/school-details/' + ${school.id} + '/courses'}">
+                               th:href="@{'/course?schoolId=' + ${school.id}}">
                             <i class="fas fa-book-open me-2"></i>Courses
                         </a></li>
                         <li><a class="dropdown-item dropdown-item-modern" 
-                               th:href="@{'/school-details/' + ${school.id} + '/students'}">
+                               th:href="@{'/student?schoolId=' + ${school.id}}">
                             <i class="fas fa-user-graduate me-2"></i>Students
                         </a></li>
                         <li><a class="dropdown-item dropdown-item-modern" 
-                               th:href="@{'/school-details/' + ${school.id} + '/teachers'}">
+                               th:href="@{'/teacher?schoolId=' + ${school.id}}">
                             <i class="fas fa-chalkboard-teacher me-2"></i>Teachers
                         </a></li>
                         <li><a class="dropdown-item dropdown-item-modern" 
-                               th:href="@{'/school-details/' + ${school.id} + '/groups'}">
+                               th:href="@{'/group?schoolId=' + ${school.id}}">
                             <i class="fas fa-layer-group me-2"></i>Groups
                         </a></li>
                     </ul>

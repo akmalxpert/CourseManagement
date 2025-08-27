@@ -31,10 +31,19 @@ public class StudentController {
         return ResponseEntity.ok(studentService.get(id));
     }
 
+    @GetMapping("/all")
+    public ResponseEntity<ResponseData> getAllStudents() {
+        return ResponseEntity.ok(studentService.getAll());
+    }
+
     @GetMapping
     public ResponseEntity<ResponseData> getByGroupIdOrLevel(
             @RequestParam(required = false) String groupId,
             @RequestParam(required = false) Integer level) {
+        // If both parameters are null, return all students
+        if (groupId == null && level == null) {
+            return ResponseEntity.ok(studentService.getAll());
+        }
         studentValidationService.validateGetByGroupIdOrLevel(groupId, level);
         return ResponseEntity.ok(studentService.getByGroupIdOrLevel(groupId, level));
     }

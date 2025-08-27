@@ -31,6 +31,12 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
+    public ResponseData getAll() {
+        List<Student> students = studentRepository.findAll();
+        return new ResponseData(students);
+    }
+
+    @Override
     public ResponseData add(StudentDTO studentDTO) {
         String groupId = studentDTO.getGroupId();
         groupRepository.findById(UUID.fromString(groupId)).orElseThrow(GroupNotFoundException::new);
@@ -60,10 +66,13 @@ public class StudentServiceImpl implements StudentService {
         UUID uuid = UUID.fromString(id);
         Student student = studentRepository.findById(uuid).orElseThrow(StudentNotFoundException::new);
 
-        UUID groupUUID = UUID.fromString(studentDTO.getGroupId());
-        if (!Objects.equals(student.getGroupId(), groupUUID)) {
-            groupRepository.findById(groupUUID)
-                    .orElseThrow(GroupNotFoundException::new);
+        // Only validate group if it's being updated (not null)
+        if (studentDTO.getGroupId() != null) {
+            UUID groupUUID = UUID.fromString(studentDTO.getGroupId());
+            if (!Objects.equals(student.getGroupId(), groupUUID)) {
+                groupRepository.findById(groupUUID)
+                        .orElseThrow(GroupNotFoundException::new);
+            }
         }
 
         student = studentMapper.studentFromStudentDTOUpdate(studentDTO, student);
