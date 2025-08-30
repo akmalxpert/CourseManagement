@@ -39,7 +39,7 @@ public class SwaggerConfig {
                 "Course Management",
                 "1.0",
                 "Terms of service",
-                new Contact("Akmaljon Samandarov", "https://github.com/sah2020",
+                new Contact("Akmaljon Samandarov", "https://github.com/akmalxpert",
                         "akmaljonsamandarov@gmail.com"),
                 "License of API",
                 "API license URL",

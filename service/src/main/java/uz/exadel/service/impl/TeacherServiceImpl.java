@@ -21,12 +21,11 @@ import java.util.UUID;
 public class TeacherServiceImpl implements TeacherService {
     private final TeacherRepository teacherRepository;
     private final SchoolRepository schoolRepository;
-    private final TeacherMapper teacherMapper;
+    private final TeacherMapper teacherMapper = TeacherMapper.INSTANCE;
 
-    public TeacherServiceImpl(TeacherRepository teacherRepository, SchoolRepository schoolRepository, TeacherMapper teacherMapper) {
+    public TeacherServiceImpl(TeacherRepository teacherRepository, SchoolRepository schoolRepository) {
         this.teacherRepository = teacherRepository;
         this.schoolRepository = schoolRepository;
-        this.teacherMapper = teacherMapper;
     }
 
     @Override
@@ -65,10 +64,12 @@ public class TeacherServiceImpl implements TeacherService {
         UUID uuid = UUID.fromString(id);
         Teacher teacher = teacherRepository.findById(uuid).orElseThrow(TeacherNotFoundException::new);
 
-        UUID schoolUUID = UUID.fromString(teacherDTO.getSchoolId());
-        if (!Objects.equals(teacher.getSchoolId(), schoolUUID)) {
-            schoolRepository.findById(schoolUUID)
-                    .orElseThrow(SchoolNotFoundException::new);
+        if (teacherDTO.getSchoolId() != null) {
+            UUID schoolUUID = UUID.fromString(teacherDTO.getSchoolId());
+            if (!Objects.equals(teacher.getSchoolId(), schoolUUID)) {
+                schoolRepository.findById(schoolUUID)
+                        .orElseThrow(SchoolNotFoundException::new);
+            }
         }
 
         teacher = teacherMapper.teacherFromTeacherDTOUpdate(teacherDTO, teacher);

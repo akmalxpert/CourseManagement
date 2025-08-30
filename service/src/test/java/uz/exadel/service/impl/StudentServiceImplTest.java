@@ -16,7 +16,6 @@ import uz.exadel.entity.Group;
 import uz.exadel.entity.Student;
 import uz.exadel.exception.GroupNotFoundException;
 import uz.exadel.exception.StudentNotFoundException;
-import uz.exadel.mapper.impl.StudentMapperImpl;
 import uz.exadel.repository.GroupRepository;
 import uz.exadel.repository.StudentRepository;
 
@@ -42,14 +41,11 @@ class StudentServiceImplTest {
     @Mock
     private StudentRepository studentRepository;
 
-    @Mock
-    private StudentMapperImpl studentMapper;
-
     private InOrder inOrder;
 
     @BeforeEach
     void setUp() {
-        inOrder = Mockito.inOrder(studentMapper, groupRepository, studentRepository);
+        inOrder = Mockito.inOrder(groupRepository, studentRepository);
     }
 
     @InjectMocks
@@ -60,16 +56,14 @@ class StudentServiceImplTest {
     void createSuccess() {
         //given
         StudentDTO studentDTO = createStudentDTO();
-        Student student = createStudent();
 
         //when
         when(groupRepository.findById(UUID.fromString(TEST_GROUP_ID))).thenReturn(Optional.of(new Group()));
-        when(studentMapper.studentFromStudentDTO(studentDTO)).thenReturn(student);
         ResponseData actualResult = studentService.add(studentDTO);
 
         //then
         inOrder.verify(groupRepository, times(1)).findById(UUID.fromString(TEST_GROUP_ID));
-        inOrder.verify(studentRepository, times(1)).save(student);
+        inOrder.verify(studentRepository, times(1)).save(Mockito.any(Student.class));
         assertEquals("Save success", actualResult.getDetail());
         inOrder.verifyNoMoreInteractions();
     }
@@ -132,12 +126,11 @@ class StudentServiceImplTest {
         Student student = createStudent();
 
         when(studentRepository.findById(TEST_STUDENT_UUID)).thenReturn(Optional.of(student));
-        when(studentMapper.studentFromStudentDTOUpdate(studentDTO, student)).thenReturn(student);
 
         ResponseData actualResult = studentService.update(TEST_STUDENT_ID, studentDTO);
 
         inOrder.verify(studentRepository, times(1)).findById(TEST_STUDENT_UUID);
-        inOrder.verify(studentRepository, times(1)).save(student);
+        inOrder.verify(studentRepository, times(1)).save(Mockito.any(Student.class));
         assertEquals("Update success", actualResult.getDetail());
         inOrder.verifyNoMoreInteractions();
     }

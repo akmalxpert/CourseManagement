@@ -17,7 +17,6 @@ import uz.exadel.entity.Teacher;
 import uz.exadel.enums.TeacherPositionEnum;
 import uz.exadel.exception.SchoolNotFoundException;
 import uz.exadel.exception.TeacherNotFoundException;
-import uz.exadel.mapper.impl.TeacherMapperImpl;
 import uz.exadel.repository.SchoolRepository;
 import uz.exadel.repository.TeacherRepository;
 
@@ -46,14 +45,11 @@ class TeacherServiceImplTest {
     @Mock
     private TeacherRepository teacherRepository;
 
-    @Mock
-    private TeacherMapperImpl teacherMapper;
-
     private InOrder inOrder;
 
     @BeforeEach
     void setUp() {
-        inOrder = Mockito.inOrder(teacherMapper, schoolRepository, teacherRepository);
+        inOrder = Mockito.inOrder(schoolRepository, teacherRepository);
     }
 
     @InjectMocks
@@ -64,16 +60,14 @@ class TeacherServiceImplTest {
     void createSuccess() {
         //given
         TeacherDTO teacherDTO = createTeacherDTO();
-        Teacher teacher = createTeacher();
 
         //when
         when(schoolRepository.findById(UUID.fromString(TEST_SCHOOL_ID))).thenReturn(Optional.of(new School()));
-        when(teacherMapper.teacherFromTeacherDTO(teacherDTO)).thenReturn(teacher);
         ResponseData actualResult = teacherService.add(teacherDTO);
 
         //then
         inOrder.verify(schoolRepository, times(1)).findById(UUID.fromString(TEST_SCHOOL_ID));
-        inOrder.verify(teacherRepository, times(1)).save(teacher);
+        inOrder.verify(teacherRepository, times(1)).save(Mockito.any(Teacher.class));
         assertEquals("Save success", actualResult.getDetail());
         inOrder.verifyNoMoreInteractions();
     }
@@ -136,12 +130,11 @@ class TeacherServiceImplTest {
         Teacher teacher = createTeacher();
 
         when(teacherRepository.findById(TEST_TEACHER_UUID)).thenReturn(Optional.of(teacher));
-        when(teacherMapper.teacherFromTeacherDTOUpdate(teacherDTO, teacher)).thenReturn(teacher);
 
         ResponseData actualResult = teacherService.update(teacherDTO, TEST_TEACHER_ID);
 
         inOrder.verify(teacherRepository, times(1)).findById(TEST_TEACHER_UUID);
-        inOrder.verify(teacherRepository, times(1)).save(teacher);
+        inOrder.verify(teacherRepository, times(1)).save(Mockito.any(Teacher.class));
         assertEquals("Update success", actualResult.getDetail());
         inOrder.verifyNoMoreInteractions();
     }
