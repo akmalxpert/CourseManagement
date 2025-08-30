@@ -4,19 +4,8 @@ A comprehensive course management application designed for educational instituti
 
 > **Note**: This is a portfolio project developed to showcase software engineering skills and does not represent any actual service or company.
 
-## 📱 Screenshots
-
-### Dashboard Overview
-*[Screenshot placeholder - Main dashboard showing system overview]*
-
-### Course Management
-*[Screenshot placeholder - Course listing and management interface]*
-
-### Student Registration
-*[Screenshot placeholder - Student registration and enrollment process]*
-
-### API Documentation
-*[Screenshot placeholder - Swagger API documentation interface]*
+## 📱 DEMO
+![DEMO.gif](DEMO.gif)
 
 ## 🚀 Features
 
