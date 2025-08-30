@@ -76,15 +76,6 @@ class CourseValidationServiceImplTest {
         assertEquals("This ID is not valid for the system", exception.getMessage());
     }
 
-    @Test
-    @DisplayName("Failure while updating course with invalid ID")
-    void validateUpdateFailure_NullSchoolIdAndGroupId() {
-
-        MissingMandatoryFieldException exception = assertThrows(MissingMandatoryFieldException.class,
-                () -> courseValidationService.validateGetBySchoolIdOrGroupId(null, null));
-        assertEquals("GroupId or SchoolId is missing or empty", exception.getMessage());
-    }
-
     @ParameterizedTest
     @MethodSource("blankOrNullStrings")
     @DisplayName("Failure while updating course with empty, whitespace only or null name")

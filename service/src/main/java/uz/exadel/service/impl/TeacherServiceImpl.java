@@ -21,11 +21,12 @@ import java.util.UUID;
 public class TeacherServiceImpl implements TeacherService {
     private final TeacherRepository teacherRepository;
     private final SchoolRepository schoolRepository;
-    private final TeacherMapper teacherMapper = TeacherMapper.INSTANCE;
+    private final TeacherMapper teacherMapper;
 
-    public TeacherServiceImpl(TeacherRepository teacherRepository, SchoolRepository schoolRepository) {
+    public TeacherServiceImpl(TeacherRepository teacherRepository, SchoolRepository schoolRepository, TeacherMapper teacherMapper) {
         this.teacherRepository = teacherRepository;
         this.schoolRepository = schoolRepository;
+        this.teacherMapper = teacherMapper;
     }
 
     @Override

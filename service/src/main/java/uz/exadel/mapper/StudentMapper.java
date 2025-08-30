@@ -1,10 +1,7 @@
 package uz.exadel.mapper;
 
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-import org.mapstruct.MappingTarget;
-import org.mapstruct.Named;
-import org.mapstruct.factory.Mappers;
+import org.mapstruct.*;
+import org.springframework.beans.factory.annotation.Autowired;
 import uz.exadel.dtos.StudentDTO;
 import uz.exadel.entity.Course;
 import uz.exadel.entity.Student;
@@ -15,15 +12,11 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring", nullValueCheckStrategy = NullValueCheckStrategy.ALWAYS)
 public abstract class StudentMapper {
-    public static final StudentMapper INSTANCE = Mappers.getMapper(StudentMapper.class);
 
-    protected final CourseRepository courseRepository;
-
-    protected StudentMapper(CourseRepository courseRepository) {
-        this.courseRepository = courseRepository;
-    }
+    @Autowired
+    private CourseRepository courseRepository;
 
     @Mapping(source = "groupId", target = "groupId", qualifiedByName = "stringToUUID")
     @Mapping(source = "courses", target = "courses", qualifiedByName = "stringListToCoursesSet")

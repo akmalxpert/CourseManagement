@@ -16,6 +16,7 @@ import uz.exadel.entity.Group;
 import uz.exadel.entity.Student;
 import uz.exadel.exception.GroupNotFoundException;
 import uz.exadel.exception.StudentNotFoundException;
+import uz.exadel.mapper.StudentMapper;
 import uz.exadel.repository.GroupRepository;
 import uz.exadel.repository.StudentRepository;
 
@@ -41,6 +42,9 @@ class StudentServiceImplTest {
     @Mock
     private StudentRepository studentRepository;
 
+    @Mock
+    private StudentMapper studentMapper;
+
     private InOrder inOrder;
 
     @BeforeEach
@@ -56,11 +60,11 @@ class StudentServiceImplTest {
     void createSuccess() {
         //given
         StudentDTO studentDTO = createStudentDTO();
-
+        Student mappedStudent = createStudent();
         //when
         when(groupRepository.findById(UUID.fromString(TEST_GROUP_ID))).thenReturn(Optional.of(new Group()));
+        when(studentMapper.studentFromStudentDTO(studentDTO)).thenReturn(mappedStudent);
         ResponseData actualResult = studentService.add(studentDTO);
-
         //then
         inOrder.verify(groupRepository, times(1)).findById(UUID.fromString(TEST_GROUP_ID));
         inOrder.verify(studentRepository, times(1)).save(Mockito.any(Student.class));
@@ -124,9 +128,9 @@ class StudentServiceImplTest {
     void updateSuccess() {
         StudentDTO studentDTO = createStudentDTO();
         Student student = createStudent();
-
+        Student updatedStudent = createStudent();
         when(studentRepository.findById(TEST_STUDENT_UUID)).thenReturn(Optional.of(student));
-
+        when(studentMapper.studentFromStudentDTOUpdate(studentDTO, student)).thenReturn(updatedStudent);
         ResponseData actualResult = studentService.update(TEST_STUDENT_ID, studentDTO);
 
         inOrder.verify(studentRepository, times(1)).findById(TEST_STUDENT_UUID);

@@ -22,11 +22,12 @@ import java.util.UUID;
 public class StudentServiceImpl implements StudentService {
     private final StudentRepository studentRepository;
     private final GroupRepository groupRepository;
-    private final StudentMapper studentMapper = StudentMapper.INSTANCE;
+    private final StudentMapper studentMapper;
 
-    public StudentServiceImpl(StudentRepository studentRepository, GroupRepository groupRepository) {
+    public StudentServiceImpl(StudentRepository studentRepository, GroupRepository groupRepository, StudentMapper studentMapper) {
         this.studentRepository = studentRepository;
         this.groupRepository = groupRepository;
+        this.studentMapper = studentMapper;
     }
 
     @Override
@@ -65,12 +66,10 @@ public class StudentServiceImpl implements StudentService {
         UUID uuid = UUID.fromString(id);
         Student student = studentRepository.findById(uuid).orElseThrow(StudentNotFoundException::new);
 
-        if (studentDTO.getGroupId() != null) {
-            UUID groupUUID = UUID.fromString(studentDTO.getGroupId());
-            if (!Objects.equals(student.getGroupId(), groupUUID)) {
-                groupRepository.findById(groupUUID)
-                        .orElseThrow(GroupNotFoundException::new);
-            }
+        UUID groupUUID = UUID.fromString(studentDTO.getGroupId());
+        if (!Objects.equals(student.getGroupId(), groupUUID)) {
+            groupRepository.findById(groupUUID)
+                    .orElseThrow(GroupNotFoundException::new);
         }
 
         student = studentMapper.studentFromStudentDTOUpdate(studentDTO, student);

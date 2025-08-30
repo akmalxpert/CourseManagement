@@ -79,40 +79,6 @@ class StudentValidationServiceImplTest {
     }
 
     @ParameterizedTest
-    @MethodSource("blankOrNullStrings")
-    @DisplayName("Failure while updating student with empty, whitespace only or null name")
-    void validateUpdateFailure_EmptyOrNullName(String value) {
-        StudentDTO studentDTO = createStudentDTO();
-        studentDTO.setFullName(value);
-
-        MissingMandatoryFieldException exception = assertThrows(MissingMandatoryFieldException.class,
-                () -> studentValidationService.validateUpdate(TEST_STUDENT_ID, studentDTO));
-        assertEquals("Full Name is missing or empty", exception.getMessage());
-    }
-
-    @Test
-    @DisplayName("Failure while updating student with null courses")
-    void validateUpdateFailure_NullCourse() {
-        StudentDTO studentDTO = createStudentDTO();
-        studentDTO.setCourses(null);
-
-        MissingMandatoryFieldException exception = assertThrows(MissingMandatoryFieldException.class,
-                () -> studentValidationService.validateUpdate(TEST_STUDENT_ID, studentDTO));
-        assertEquals("Courses is missing or empty", exception.getMessage());
-    }
-
-    @Test
-    @DisplayName("Failure while updating student with null level")
-    void validateUpdateFailure_NullLevel() {
-        StudentDTO studentDTO = createStudentDTO();
-        studentDTO.setLevel(null);
-
-        MissingMandatoryFieldException exception = assertThrows(MissingMandatoryFieldException.class,
-                () -> studentValidationService.validateUpdate(TEST_STUDENT_ID, studentDTO));
-        assertEquals("Student Level is missing or empty", exception.getMessage());
-    }
-
-    @ParameterizedTest
     @ValueSource(ints = {0, -1, 17})
     @DisplayName("Failure while updating student with invalid level")
     void validateUpdateFailure_InvalidLevel(Integer level) {

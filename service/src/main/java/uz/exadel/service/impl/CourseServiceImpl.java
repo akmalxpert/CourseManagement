@@ -76,9 +76,8 @@ public class CourseServiceImpl implements CourseService {
         schoolRepository.findById(UUID.fromString(schoolId)).orElseThrow(SchoolNotFoundException::new);
 
         Course course = CourseMapper.INSTANCE.courseToCourseDTO(courseDTO);
-        Course savedCourse = courseRepository.save(course);
+        courseRepository.save(course);
         
-        logger.info("Successfully created course with ID: {}", savedCourse.getId());
         return new ResponseData(null, "Save success");
     }
 

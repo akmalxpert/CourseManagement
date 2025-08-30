@@ -1,10 +1,7 @@
 package uz.exadel.mapper;
 
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-import org.mapstruct.MappingTarget;
-import org.mapstruct.Named;
-import org.mapstruct.factory.Mappers;
+import org.mapstruct.*;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 import uz.exadel.dtos.TeacherDTO;
 import uz.exadel.entity.Course;
@@ -17,15 +14,11 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring", nullValueCheckStrategy = NullValueCheckStrategy.ALWAYS)
 public abstract class TeacherMapper {
-    public static final TeacherMapper INSTANCE = Mappers.getMapper(TeacherMapper.class);
 
-    protected final CourseRepository courseRepository;
-
-    protected TeacherMapper(CourseRepository courseRepository) {
-        this.courseRepository = courseRepository;
-    }
+    @Autowired
+    private CourseRepository courseRepository;
 
     @Mapping(source = "schoolId", target = "schoolId", qualifiedByName = "stringToUUID")
     @Mapping(source = "courses", target = "courses", qualifiedByName = "stringListToCoursesSet")
@@ -50,6 +43,9 @@ public abstract class TeacherMapper {
 
     @Named("stringListToCoursesSet")
     protected Set<Course> stringListToCoursesSet(List<String> courseIds) {
+        if (courseIds == null || courseIds.isEmpty()) {
+            return null;
+        }
         Set<UUID> courseUUIDs = courseIds.stream().map(UUID::fromString).collect(Collectors.toSet());
         return courseRepository.findByIdIn(courseUUIDs);
     }

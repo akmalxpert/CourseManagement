@@ -17,6 +17,7 @@ import uz.exadel.entity.Teacher;
 import uz.exadel.enums.TeacherPositionEnum;
 import uz.exadel.exception.SchoolNotFoundException;
 import uz.exadel.exception.TeacherNotFoundException;
+import uz.exadel.mapper.TeacherMapper;
 import uz.exadel.repository.SchoolRepository;
 import uz.exadel.repository.TeacherRepository;
 
@@ -45,6 +46,9 @@ class TeacherServiceImplTest {
     @Mock
     private TeacherRepository teacherRepository;
 
+    @Mock
+    private TeacherMapper teacherMapper;
+
     private InOrder inOrder;
 
     @BeforeEach
@@ -60,11 +64,11 @@ class TeacherServiceImplTest {
     void createSuccess() {
         //given
         TeacherDTO teacherDTO = createTeacherDTO();
-
+        Teacher mappedTeacher = createTeacher();
         //when
         when(schoolRepository.findById(UUID.fromString(TEST_SCHOOL_ID))).thenReturn(Optional.of(new School()));
+        when(teacherMapper.teacherFromTeacherDTO(teacherDTO)).thenReturn(mappedTeacher);
         ResponseData actualResult = teacherService.add(teacherDTO);
-
         //then
         inOrder.verify(schoolRepository, times(1)).findById(UUID.fromString(TEST_SCHOOL_ID));
         inOrder.verify(teacherRepository, times(1)).save(Mockito.any(Teacher.class));
@@ -128,9 +132,9 @@ class TeacherServiceImplTest {
     void updateSuccess() {
         TeacherDTO teacherDTO = createTeacherDTO();
         Teacher teacher = createTeacher();
-
+        Teacher updatedTeacher = createTeacher();
         when(teacherRepository.findById(TEST_TEACHER_UUID)).thenReturn(Optional.of(teacher));
-
+        when(teacherMapper.teacherFromTeacherDTOUpdate(teacherDTO, teacher)).thenReturn(updatedTeacher);
         ResponseData actualResult = teacherService.update(teacherDTO, TEST_TEACHER_ID);
 
         inOrder.verify(teacherRepository, times(1)).findById(TEST_TEACHER_UUID);
@@ -180,7 +184,6 @@ class TeacherServiceImplTest {
     private Teacher createTeacher() {
         Set<TeacherPositionEnum> positionSet = TEST_TEACHER_POSITIONS.stream().map(TeacherPositionEnum::valueOf).collect(Collectors.toSet());
         Set<Course> courseSet = new HashSet<>();
-        courseSet.add(new Course());
         return new Teacher(
                 TEST_TEACHER_UUID,
                 TEST_TEACHER_NAME,
